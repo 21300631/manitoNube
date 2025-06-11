@@ -1,0 +1,52 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.light {
+    background-color: #B07BA6;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.contenedor-resultado {
+    background-color: #945187;
+    padding: 40px 60px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.contenedor-resultado h1 {
+    font-size: 3em;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 3px black;
+}
+
+.datos-finales p {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+.boton-volver {
+    display: inline-block;
+    margin-top: 30px;
+    background-color: white;
+    color: #945187;
+    text-decoration: none;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.boton-volver:hover {
+    background-color: #f0f0f0;
+    color: #6b3561;
+}

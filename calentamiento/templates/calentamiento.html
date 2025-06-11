@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calentamiento</title>
+    <link rel="stylesheet" href="{% static 'calentamiento.css'%}">
+    <script src="{% static 'calentamiento.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="todo">
+     
+        <div class="izquierda">
+            <div class="divnavegador">
+                <nav>
+                    
+                    <a href="/inicio/"><img src="{% static 'casa.png'%}" alt="1"><span>Inicio</span> </a>
+                    <a href="/foro/"><img src="{% static 'foro.png'%}" alt=""> <span>Foro</span></a>
+                    <a href="/repaso/"><img src="{% static 'libro.png'%}" alt=""> <span>Repaso</span></a>
+                    <a href="/perfil/"><img src="{% static 'usuario.png'%}" alt=""> <span>Perfil</span></a>
+
+                </nav>
+            </div>
+            <div class="cuadro-siguiente">
+                <div class="titulo-panel">Vamos a calentar</div>
+                <div class="panel-siguiente">
+                    <div class="item-container">
+                        <div class="banners">
+                            <div class="ejercicio">Abrir y cerrar manos</div> <!--Tiene un retraso de 10 segundos solo el primero-->
+                            <div class="ejercicio">Girar muñecas</div>
+                            <div class="ejercicio">Girar manos hacia afuera</div>
+                            <div class="ejercicio">Girar manos hacia adentro</div>
+                            <div class="ejercicio">Juntar yemas de los dedos</div>
+                            <div class="ejercicio">Abrir y cerrar manos levantando dedo por dedo</div>
+                            <div class="ejercicio">Sacudir manos</div>
+
+                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="derecha">
+            <div class="panel-calentamiento">
+                <div class="imagen-espacio">
+                    <video id="ejercicioVideo" autoplay muted playsinline webkit-playsinline>
+                        Tu navegador no soporta videos HTML5
+                    </video>
+                    <!-- Mensaje de carga -->
+                    <div class="video-loading">Cargando ejercicio...</div>
+                </div>
+                
+            </div>
+            
+
+        </div>
+    </div>
+</body>
+</html>

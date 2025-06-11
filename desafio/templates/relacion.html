@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parejas Locas</title>
+    <link rel="stylesheet" href="{% static 'desafios.css'%}">
+    <link rel="stylesheet" href="{% static 'relacion.css'%}">
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="instruccion">
+        <span>Relaciona cada gesto con su palabra correspondiente antes de que se acabe el tiempo.</span>
+    </div>
+
+    <div class="juego-container">
+        <!-- Fila de palabras (arriba) -->
+        <!-- Columna de Palabras -->
+        <div class="fila palabras">
+            {% for palabra in palabras %}
+                <div data-id="{{ palabra.id }}" data-palabra="{{ palabra.palabra }}" class="item palabra">
+                    <span>{{ palabra.palabra }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Columna de Imágenes -->
+        <div class="fila imagenes">
+            {% for img in imagenes %}
+                <div data-id="{{ palabras.forloop.counter0 }}" data-palabra="{{ img.palabra }}" class="item imagen">
+                    <img src="{{ img.url }}" alt="Gesto {{ img.palabra }}">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="extras mem">
+        <div class="reloj relojM"><span id="tiempo">1:00</span></div>
+        <div class="puntaje">
+            <strong>Aciertos:</strong> <span id="contador">0</span>
+        </div>
+        <a class="cancelarM" href="/inicio/">Cancelar</a>
+        <div id="juego-data" data-total-pares="{{ total_pares }}"></div>
+    </div>
+
+    <!-- Añade esto ANTES de cargar el script relacion.js -->
+<script type="application/json" id="pares-data">
+    {
+        "pares_correctos": [
+            {% for par in pares_correctos %}
+            {
+                "palabra": {
+                    "id": "{{ par.palabra.id }}",
+                    "palabra": "{{ par.palabra.palabra|escapejs }}"
+                },
+                "imagen": {
+                    "id": "{{ par.imagen.id }}",
+                    "url": "{{ par.imagen.url|escapejs }}",
+                    "palabra": "{{ par.imagen.palabra|escapejs }}"
+                }
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ],
+        "pares_reserva": [
+            {% for par in pares_reserva %}
+            {
+                "palabra": {
+                    "id": "{{ par.palabra.id }}",
+                    "palabra": "{{ par.palabra.palabra|escapejs }}"
+                },
+                "imagen": {
+                    "id": "{{ par.imagen.id }}",
+                    "url": "{{ par.imagen.url|escapejs }}",
+                    "palabra": "{{ par.imagen.palabra|escapejs }}"
+                }
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+    </script>
+    
+    <!-- Luego carga tu JS -->
+    <script src="{% static 'relacion.js' %}"></script>
+</body>
+</html>

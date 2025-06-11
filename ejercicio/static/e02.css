@@ -1,0 +1,270 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body.light {
+    background-color: #BCDCFB;
+}
+
+body.dark {
+    background-color: #1a1a1a;
+    color: white;
+}
+.todo{
+    background-color: #BCDCFB;
+}
+
+.instruccion{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3C91E6;
+    height: 97px;
+    width: 100%;
+}
+
+.instruccion span{
+    text-align: center;
+    color: #fff;
+    font-family:  Arial;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.resaltado {
+    font-weight: bold;
+    color: #EF767A; /* naranja */
+}
+
+.contenido{
+    display: flex;
+    height: 641px;
+    width: 100%;
+}
+
+.panel-barra{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 100%;
+}
+
+.progress-container {
+    height: 550px; /* Altura del contenedor */
+    width: 50px; /* Ancho del contenedor */
+    background-color: #61A8EC;
+    border-radius: 40px;
+    overflow: hidden;
+    margin: 20px 0;
+    position: relative;
+}
+
+.progress-bar{
+    width: 100%;
+    height: 0%; /* La altura se ajustará dinámicamente */
+    background-color: #3C91E6;
+    transition: height 0.5s ease-in-out;
+    position: absolute;
+    bottom: 0; /* La barra crece desde abajo */
+}
+
+
+.panel2{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.panel-btn{
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    height: 20vh;
+    width: 100%;
+}
+
+
+.btn-salir{
+    position: absolute;
+    right: 0;
+    top: 40px;
+
+    margin-right: 100px;
+    width: 140px;
+    height: 70px;
+    background-color: #61A8EC;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    font-size: 18px;
+}
+
+
+
+/* cosas individuales de cada ejercicio  */
+
+.ejemplos{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    height: 15vh;
+    justify-items: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    font-size: 28px;
+
+}
+
+.ejercicio{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    height: 50vh;
+    justify-items: center;
+    align-items: center;
+}
+
+.card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3C91E6;
+    border-radius: 10px;
+    width: 330px;
+    height: 70%;
+}
+
+.card:hover{
+    background-color: #0673e0;
+    cursor: pointer;
+}   
+.card.correcto {
+    border: 3px solid limegreen;
+    animation: pop 0.3s ease;
+}
+
+.card.incorrecto {
+    border: 3px solid red;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+
+/* Media Queries para pantallas pequeñas */
+@media (max-width: 767px) {
+    .todo {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .contenido {
+        flex-direction: column;
+        height: auto;
+        flex: 1;
+    }
+    
+    .panel-barra {
+        width: 100%;
+        height: auto;
+        padding: 10px 0;
+    }
+    
+    .progress-container {
+        height: 50px;
+        width: 80%;
+        max-width: 550px;
+        margin: 10px 0;
+    }
+    
+    .progress-bar {
+        width: 0%;
+        height: 100%;
+        top: 0;
+        bottom: auto;
+        transition: width 0.5s ease-in-out;
+    }
+    
+    .panel2 {
+        height: auto;
+        flex: 1;
+    }
+    
+    .panel-btn {
+        position: relative;
+        height: 100px;
+        justify-content: flex-end;
+        padding: 20px;
+    }
+    
+    .btn-salir {
+        position: static;
+        margin-right: 20px;
+        width: 120px;
+        height: 60px;
+        font-size: 16px;
+    }
+    
+    .ejemplos {
+        grid-template-columns: 1fr;
+        height: auto;
+        padding: 15px;
+        gap: 15px;
+        font-size: 24px;
+    }
+    
+    .ejercicio {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        height: auto;
+        padding: 20px;
+        gap: 20px;
+    }
+    
+    .card {
+        width: 100%;
+        max-width: 300px;
+        height: 200px;
+        margin: 0 auto;
+    }
+}
+
+/* Ajustes para pantallas muy pequeñas (menos de 400px) */
+@media (max-width: 400px) {
+    .instruccion span {
+        font-size: 20px;
+    }
+    
+    .card {
+        height: 150px;
+    }
+    
+    .btn-salir {
+        width: 100px;
+        height: 50px;
+        font-size: 14px;
+    }
+
+    video{
+        width: 50%;
+    }
+    img{
+        width: 50%;
+    }
+}

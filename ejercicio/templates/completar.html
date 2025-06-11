@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completar</title>
+    <link rel="stylesheet" href="{% static 'e04.css'%}">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
+
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}" data-url-verificacion="{% url 'verificar_completar' %}" data-url-siguiente="{% url 'siguiente_ejercicio' %}">
+    <div class="todo">
+        <div class="instruccion">
+            <span>{{ texto_instruccion }}</span>
+        </div>
+        <div class="contenido">
+            <div class="panel-barra">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar" data-progreso-inicial="{{ request.session.progreso|default:0 }}"></div>
+                </div>
+            </div>
+            <div class="panel2">
+                <div class="ejercicio"> {{ frase_completar }}</div>
+                <div class="gestos">
+                    {% for opcion in opciones %}
+                        <div class="gesto" data-id="{{ opcion.id }}">
+                            {% if opcion.es_video %}
+                                <video src="{{ opcion.url }}" loop autoplay muted width="80%" padding="10%"></video>
+                            {% else %}
+                                <img src="{{ opcion.url }}" alt="Gesto de {{ opcion.palabra }}" width="80%" padding="10%" margin="0">
+                            {% endif %}
+                        </div>
+                    {% endfor %}            
+                </div>
+                <div  method="POST" class="panel-btn">
+                    <form action="{% url 'reiniciar_progreso' %}">
+                        {% csrf_token %}
+
+                        <button class="btn-salir">Salir</button>
+                    </form>
+                    <form method="post" action="{% url 'siguiente_ejercicio' %}">
+                        {% csrf_token %}
+                        <button style="display: none;" type="submit">Siguiente</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'completar.js' %}"></script>
+
+</body>
+</html>

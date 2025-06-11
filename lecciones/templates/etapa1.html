@@ -1,0 +1,118 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'etapa1.css' %}">
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="todo">
+        <div class="panel-izquierdo">
+            <div class="navegador">
+                <nav>
+                    <a href="/inicio/"><img src="{% static 'casa.png'%}" alt="1"></a>
+                    <a href="/foro/"><img src="{% static 'foro.png'%}" alt="2"></a>
+                    <a href="/repaso/"><img src="{% static 'libro.png'%}" alt="3"></a>
+                    <a href="/perfil/"><img src="{% static 'usuario.png'%}" alt="4"></a> 
+                </nav>        
+            </div>
+        </div>
+        <div class="panel-derecho">
+            <div class="etapa">
+                <span class="titulo">Etapa1</span>
+                <span class="descripcion">En esta etapa aprenderas las categorias abecedario, calendario, colores y cuerpo humano.</span>
+
+            </div>
+            <div class="lecciones">
+                <div class="item1">
+                    <div class="nivel">Nivel1</div>
+                </div>
+                <div class="item2">
+                    <a href="{% url 'generar_leccion' %}?leccion_id=1" class="leccionA  {{ lecciones_estado.1 }}" title="{{ palabras_por_leccion.1 }}">L1</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=2" class="leccionA  {{ lecciones_estado.2 }}" title="{{ palabras_por_leccion.2 }}">L2</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=3" class="leccionA  {{ lecciones_estado.3 }}" title="{{ palabras_por_leccion.3 }}">L3</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=4" class="leccionA  {{ lecciones_estado.4 }}" title="{{ palabras_por_leccion.4 }}">L4</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=5" class="leccionA  {{ lecciones_estado.5 }}" title="{{ palabras_por_leccion.5 }}">L5</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=6" class="leccionA  {{ lecciones_estado.6 }}" title="{{ palabras_por_leccion.6 }}">L6</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=7" class="leccionA  {{ lecciones_estado.7 }}" title="{{ palabras_por_leccion.7 }}">L7</a>
+                </div>
+                <div class="item3">
+                    <div class="nivel">Nivel2</div>
+                </div>
+                <div class="item4">
+                    <div class="nivel">Nivel3</div>
+                </div>
+                <div class="item5">
+                    <div class="nivel">Nivel4</div>
+                </div>
+                <div class="item6">
+                    <a href="{% url 'generar_leccion' %}?leccion_id=13" class="leccionA {{ lecciones_estado.13 }}" title="{{ palabras_por_leccion.13 }}">L13</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=12" class="leccionA {{ lecciones_estado.12 }}" title="{{ palabras_por_leccion.12 }}">L12</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=11" class="leccionA  {{ lecciones_estado.11 }}" title="{{ palabras_por_leccion.11 }}">L11</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=10" class="leccionA  {{ lecciones_estado.10 }}" title="{{ palabras_por_leccion.10 }}">L10</a>
+                </div>
+                <div class="item7">
+                    <a href="{% url 'loteria' %}"  class="leccionB  {{ lecciones_estado.501 }}">R1</a>  <!-- Asumiendo R1 tiene ID 101 -->
+                </div>
+                <div class="item8">
+                    <a href="{% url 'generar_leccion' %}?leccion_id=9" class="leccionA  {{ lecciones_estado.9 }}" title="{{ palabras_por_leccion.9 }}">L9</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=8" class="leccionA  {{ lecciones_estado.8 }}" title="{{ palabras_por_leccion.8 }}">L8</a>
+                </div>
+                <div class="item9">
+                    <a href="{% url 'generar_leccion' %}?leccion_id=14" class="leccionA  {{ lecciones_estado.14 }}" title="{{ palabras_por_leccion.14 }}">L14</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=15" class="leccionA  {{ lecciones_estado.15 }}" title="{{ palabras_por_leccion.15 }}">L15</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=16" class="leccionA  {{ lecciones_estado.16 }}" title="{{ palabras_por_leccion.16 }}">L16</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=17" class="leccionA  {{ lecciones_estado.17 }}" title="{{ palabras_por_leccion.17 }}">L17</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=18" class="leccionA  {{ lecciones_estado.18 }}" title="{{ palabras_por_leccion.18 }}">L18</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=19" class="leccionA  {{ lecciones_estado.19 }}" title="{{ palabras_por_leccion.19 }}">L19</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=20" class="leccionA  {{ lecciones_estado.20 }}" title="{{ palabras_por_leccion.20 }}">L20</a>
+                </div>
+                <div class="item10">
+                    <a href="{% url 'generar_leccion' %}?leccion_id=26" class="leccionA  {{ lecciones_estado.26 }}" title="{{ palabras_por_leccion.26 }}">L26 
+                        
+                    </a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=25" class="leccionA  {{ lecciones_estado.25 }}" title="{{ palabras_por_leccion.25 }}">L25</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=24" class="leccionA  {{ lecciones_estado.24 }}" title="{{ palabras_por_leccion.24 }}">L24</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=23" class="leccionA  {{ lecciones_estado.23 }}" title="{{ palabras_por_leccion.23 }}">L23</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=22" class="leccionA  {{ lecciones_estado.22 }}" title="{{ palabras_por_leccion.22 }}">L22</a>
+                </div>
+                <div class="item11">
+                    <a href="{% url 'loteria' %}" class="leccionB  {{ lecciones_estado.502 }}">R2</a>  <!-- Asumiendo R2 tiene ID 102 -->
+                </div>
+                <div class="item12">
+                    <a href="{% url 'generar_leccion' %}?leccion_id=21" class="leccionA  {{ lecciones_estado.21 }}" title="{{ palabras_por_leccion.21 }}">L21</a>
+                </div>
+                <div class="item13">
+                    <a href="{% url 'generar_leccion' %}?leccion_id=27" class="leccionA  {{ lecciones_estado.27 }}" title="{{ palabras_por_leccion.27 }}">L27</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=28" class="leccionA  {{ lecciones_estado.28 }}" title="{{ palabras_por_leccion.28 }}">L28</a>
+                </div>
+                <div class="item14">
+                    <a href="{% url 'loteria' %}"  class="leccionB  {{ lecciones_estado.503 }}">R3</a>  <!-- Asumiendo R3 tiene ID 103 -->
+                </div>
+                <div class="item15">
+                    <a href="{% url 'generar_leccion' %}?leccion_id=29" class="leccionA  {{ lecciones_estado.29 }}" title="{{ palabras_por_leccion.29 }}">L29</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=30" class="leccionA  {{ lecciones_estado.30 }}" title="{{ palabras_por_leccion.30 }}">L30</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=31" class="leccionA  {{ lecciones_estado.31 }}" title="{{ palabras_por_leccion.31 }}">L31</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=32" class="leccionA  {{ lecciones_estado.32 }}" title="{{ palabras_por_leccion.32 }}">L32</a>
+                </div>
+                <div class="item17">
+                    <a href="{% url 'loteria' %}"  class="leccionB  {{ lecciones_estado.504 }}">R4</a>  <!-- Asumiendo R4 tiene ID 104 -->
+                </div>
+                <div class="item16">
+                    <a href="{% url 'generar_leccion' %}?leccion_id=38" class="leccionA  {{ lecciones_estado.38 }}" title="{{ palabras_por_leccion.38 }}">L38</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=37" class="leccionA  {{ lecciones_estado.37 }}" title="{{ palabras_por_leccion.37 }}">L37</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=36" class="leccionA  {{ lecciones_estado.36 }}" title="{{ palabras_por_leccion.36 }}">L36</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=35" class="leccionA  {{ lecciones_estado.35 }}" title="{{ palabras_por_leccion.35 }}">L35</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=34" class="leccionA  {{ lecciones_estado.34 }}" title="{{ palabras_por_leccion.34 }}">L34</a>
+                    <a href="{% url 'generar_leccion' %}?leccion_id=33" class="leccionA  {{ lecciones_estado.33 }}" title="{{ palabras_por_leccion.33 }}">L33</a>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    
+</body>
+</html>

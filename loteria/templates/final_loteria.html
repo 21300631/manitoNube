@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'final_loteria.css'%}">
+</head>
+<body>
+    <div class="container-finalizado">
+    <div class="feliz">¡Felicidades!</div>
+    <div class="mensaje-final">
+        <p>Has completado el juego de lotería con éxito.</p>
+        <p>Categoría: <strong>{{ categoria }}</strong></p>
+        
+        <div class="puntuacion-final">
+            <h2>Tu puntuación final:</h2>
+            <div class="puntuacion-numero">{{ puntuacion }}</div>
+        </div>
+        
+        
+        <div class="logro-destacado">
+            <i class="fas fa-thumbs-up"></i>
+            <p>¡Buen trabajo! Sigue asi.</p>
+        </div>
+        
+        
+        <a href="/inicio/" class="btn-volver">
+            Volver al menú principal
+        </a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loteria</title>
+    <link rel="stylesheet" href="{% static 'loteria.css'%}">
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="mensaje">
+        <p id="feedback-message">Selecciona la palabra que corresponde al gesto mostrado</p>
+        <p id="puntuacion" style="display: none;">Puntuación: <span id="puntuacion-valor">0</span>/120</p>
+    </div>
+    <div class="elementos">
+        <div class="interaccion">
+            <div class="panel-ejercicio">
+                <div id="gesto-container">
+                    <img id="gesto-imagen" src="" alt="Gesto" style="max-width: 100%; display: none;">
+                    <video id="gesto-video" loop playsinline muted autoplay style="max-width: 100%; display: none;"></video>
+                </div>
+            </div>
+            <a href="/inicio/">Regresar</a>
+        </div>
+        
+        <div class="contenedor-loteria">
+            <div class="loteria">
+                {% for palabra in palabras_repaso %}
+                <div class="item" data-palabra-id="{{ palabra.id }}">
+                    <div class="palabra">{{ palabra.palabra }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script>
+    window.loteriaData = {
+        gestos: {{ gestos_json|safe }},
+        bucketDomain: "{{ bucket_domain }}"
+    };
+</script>
+<script src="{% static 'loteria.js' %}"></script>
+</body>
+</html>

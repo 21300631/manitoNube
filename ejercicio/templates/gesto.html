@@ -1,0 +1,107 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesto</title>
+    <link rel="stylesheet" href="{% static 'e06.css'%}">
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="todo">
+        <div class="instruccion">
+            <span>{{ texto_instruccion }}</span>
+        </div>
+        <div class="contenido">
+            <div class="panel-barra">
+                <div class="progress-container">
+                    
+                    <div class="progress-bar" id="progressBar" 
+                        style="height: {{ request.session.progreso|default:0 }}%;" 
+                        data-progreso-inicial="{{ request.session.progreso|default:0 }}"></div>
+                </div>
+            </div>
+            <div class="panel2">
+                <div class="ejercicio">
+                    <div class="gesto">
+                        {% if is_video %}
+                            <video id="gestoVideo" src="{{ archivo }}" autoplay loop muted width="80%" data-palabra="{{ palabra_correcta }}" data-palabra-json="{% static '' %}{{ json_url }}"></video>
+                        {% else %}
+                            <img src="{{ archivo }}" alt="Gesto {{ palabra_correcta }}" width="80%" style="padding: 10%; margin: 0;">
+                        {% endif %}
+                    </div>
+                   <div class="gesto g-usuario">
+                        <canvas id="outputCanvas" width="600" height="500" style="width: 100%; height: auto;"></canvas>
+                        <video id="inputVideo" autoplay playsinline muted style="display: none;" ></video>
+                        <div id="countdown" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 72px; color: white; text-shadow: 2px 2px 4px black;"></div>
+                        <div id="recordingTimer" style="display: none; position: absolute; top: 20px; right: 20px; font-size: 24px; color: white; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px;"></div>
+                        <!-- Añade este div para el feedback -->
+                        <div id="feedback" style="position: absolute; bottom: 20px; width: 100%; text-align: center; font-size: 24px; font-weight: bold; color: white; text-shadow: 1px 1px 2px black;"></div>
+                    </div>
+                </div> 
+                <div class="panel-btn">
+                    <form  method="POST" action="{% url 'reiniciar_progreso' %}">
+                        {% csrf_token %}
+
+                        <button class="btn-salir">Salir</button>
+                    </form>
+                    {% if is_video %}  <!-- Cambiado a is_video para coincidir con tu lógica -->
+                        <button id="recordBtn" class="btn-grabar">Grabar</button>
+                    {% endif %}
+                    <!-- <form method="post" action="{% url 'siguiente_ejercicio' %}">
+                        {% csrf_token %}
+                        <button class="btn-sig" type="submit" id="nextBtn" disabled>Siguiente</button>
+                    </form> -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- MediaPipe Hands -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <!-- Añade en tu HTML -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+
+    <script>
+        const IS_VIDEO_EXERCISE = {{ is_video|yesno:"true,false" }};
+        const LANDMARKS_JSON_URL = "{% static '' %}" + "{{ json_url }}";
+        const PALABRA_ACTUAL = "{{ palabra_correcta }}";
+        const PALABRA_ACTUAL_JSON = {{ json_url }};
+
+        
+        // Solo cargamos landmarks si NO es un video
+        if (!IS_VIDEO_EXERCISE) {
+            // const LANDMARKS_JSON_URL = "{% static '' %}" + "landmarks/{{ palabra_correcta }}.json";
+            let referenceLandmarks = null;
+            
+            fetch(LANDMARKS_JSON_URL)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    referenceLandmarks = data;
+                    console.log("Landmarks de referencia cargados:", referenceLandmarks);
+                })
+                .catch(error => {
+                    console.error("Error cargando landmarks de referencia:", error);
+                    // Opcional: mostrar feedback al usuario
+                    const feedbackElement = document.querySelector('.g-usuario div');
+                    if (feedbackElement) {
+                        feedbackElement.textContent = "Error cargando referencia del gesto";
+                        feedbackElement.style.color = "red";
+                    }
+                });
+        }
+    </script>
+    <script src="{% static 'gesto.js' %}"></script>
+</body>
+</html>

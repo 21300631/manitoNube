@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas de Repaso</title>
+    <link rel="stylesheet" href="{% static 'estadisticas.css'%}">
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+</head>
+
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="container">
+        <h1>Resultados de tu Repaso</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Ejercicios totales</div>
+                <div class="stat-value">{{ total_ejercicios }}</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">Correctos</div>
+                <div class="stat-value correct">{{ ejercicios_correctos }}</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">Incorrectos</div>
+                <div class="stat-value incorrect">{{ ejercicios_incorrectos }}</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">Acierto</div>
+                <div class="stat-value">{{ porcentaje_acierto|floatformat:1 }}%</div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="pieChart"></canvas>
+        </div>
+        
+        <a href="/inicio/" class="btn">Volver al Inicio</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            
+            // Colores que combinan con tu diseño
+            const correctColor = '#27ae60';
+            const incorrectColor = '#e74c3c';
+            const textColor = getComputedStyle(document.body).color;
+            
+            // Datos para el gráfico
+            const data = {
+                labels: ['Correctos', 'Incorrectos'],
+                datasets: [{
+                    data: [{{ ejercicios_correctos }}, {{ ejercicios_incorrectos }}],
+                    backgroundColor: [
+                        correctColor,
+                        incorrectColor
+                    ],
+                    borderColor: [
+                        '#219653', // Verde más oscuro
+                        '#c0392b'   // Rojo más oscuro
+                    ],
+                    borderWidth: 2
+                }]
+            };
+            
+            // Configuración del gráfico
+            const config = {
+                type: 'pie',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: textColor,
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            },
+                            bodyFont: {
+                                weight: 'bold',
+                                size: 14
+                            }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            formatter: (value, ctx) => {
+                                const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${percentage}%`;
+                            },
+                            font: {
+                                weight: 'bold',
+                                size: 16
+                            }
+                        }
+                    },
+                    cutout: '60%',
+                    borderRadius: 10,
+                    spacing: 5
+                },
+                plugins: [ChartDataLabels]
+            };
+            
+            // Crear el gráfico
+            new Chart(ctx, config);
+            
+            // Ajustar colores para modo oscuro
+            if (document.body.classList.contains('dark')) {
+                Chart.defaults.color = '#f5f5f5';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inicio</title>
+    <link rel="stylesheet" href="{% static 'inicio.css'%}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}">
+
+   
+
+    <div class="grid-container">
+        <div class="item1">
+            <nav>
+                <a href="/inicio/"><img src="{% static 'casa.png'%}" alt="Inicio"><span>Inicio</span></a>
+                <a href="/foro/"><img src="{% static 'foro.png'%}" alt="Foro"><span>Foro</span></a>
+                <a href="/repaso/"><img src="{% static 'libro.png'%}" alt="Repaso"><span>Repaso</span></a>
+                <a href="/perfil/"><img src="{% static 'usuario.png'%}" alt="Perfil"><span>Perfil</span></a>
+            </nav>
+        </div>
+        <div class="item2">
+            <div class="panel-perfil">
+                <img class="foto-perfil" src="{{ imagen.url }}" alt="Foto de perfil">
+                <span class="nombre-usuario">{{ usuario.username }}</span>
+                {% if perfil.medalla %}
+                <div class="medalla">
+                    <img src="{{ medalla.imagen.url }}" alt="Medalla {{ medalla.nombre }}">
+                    <span class="tooltip">{{ medalla.nombre }}</span>
+                </div>
+                {% endif %}
+                <div class="racha">
+                    <img src="{% static 'fuego.png'%}" alt="Racha">
+                    <span class="dias-racha">{{ racha }}</span>
+                </div>
+            </div>
+            <div class="panel-lecciones">
+                <div class="cards">
+                    <div class="card" onclick="bringToFront(this)" style="background-color: #81b4ff;"> 
+                        <a href="/lecciones/etapa4/"  onclick="accesoEtapa(4, this)" data-required-points="16200">4</a>
+                        <div class="texto-lecciones">
+                            <strong>Etapa 4</strong>
+                            <p>Casa, escuela, república mexicana</p>
+                            <a href="/lecciones/etapa4/" id="etapa4-card" onclick="accesoEtapa(4, this)" data-required-points="16200">
+                                <div class="play-button"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card" onclick="bringToFront(this)" style="background-color: #5199ff;">
+                        <a href="/lecciones/etapa3/" onclick="accesoEtapa(3, this)" data-required-points="10200" >3</a>
+                        <div class="texto-lecciones">
+                            <strong>Etapa 3</strong>
+                            <p>Alimentos, animales</p>
+                            <a href="/lecciones/etapa3/" id="etapa3-card" onclick="accesoEtapa(3, this)" data-required-points="10200">
+                                <div class="play-button"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card" onclick="bringToFront(this)" style="background-color: #2678ff;">
+                        <a href="/lecciones/etapa2/"  onclick="accesoEtapa(2, this)" data-required-points="6800">2</a>
+                        <div class="texto-lecciones">
+                            <strong>Etapa 2</strong>
+                            <p>Matemáticas, adjetivos calificativos</p>
+                            <a href="/lecciones/etapa2/"  id="etapa2-card" onclick="accesoEtapa(2, this)" data-required-points="6800">
+                                <div class="play-button"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card" onclick="bringToFront(this)" style="background-color: #0056d2;">
+                        <a href="/lecciones/etapa1/" id="etapa1-card" onclick="accesoEtapa(1, this)" >1</a>
+                        <div class="texto-lecciones">
+                            <strong>Etapa 1</strong>
+                            <p>Abecedario, calendario, colores, cuerpo humano</p>
+                            <a href="/lecciones/etapa1">
+                                <div class="play-button"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="item3">
+            <div class="divpuntos">
+                <div class="panel-puntos">
+                    <div class="texto-puntos">
+                        <img src="{% static 'gema.png'%}" alt="">
+                        <div class="puntos-info">
+                            <p>Siguiente etapa: <span>2 (6800 pts)</span></p>
+                            <p>Tienes: <span id="puntos-usuario"> 0 </span> puntos</p>
+                        </div>
+                        
+                    </div>
+                    <div class="contenedor-grafica">
+                        <canvas id="dona-grafica" ></canvas>
+                    </div>
+                </div>                
+            </div>
+        </div>
+        <div class="item4">
+            <div class="divcalentamiento">
+                <a class="boton-calentamiento" href="/calentamiento/">Calentamiento</a>
+            </div>
+        </div>
+        <div class="item5">
+            <div class="divnotificaciones">
+                <div class="panelNotificaciones">
+                    <div><p>Tus notificaciones</p></div>
+                    <ul>
+                        {% for noti in notificaciones %}
+                            <li class="notificacion-item">
+                                <p>
+                                    <strong class="usuario-notificacion">{{ noti.emisor.username }}</strong>
+                                    {% if noti.tipo == 'like' %}
+                                        le dio me gusta a tu publicación.
+                                    {% elif noti.tipo == 'comentario' %}
+                                        respondió a tu publicación.
+                                    {% elif noti.tipo == 'reporte' %}
+                                        reportó tu publicación.
+                                    {% endif %}
+                                </p>
+                            </li>
+                        {% empty %}
+                            <li><p>No tienes notificaciones nuevas.</p></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+                
+        </div>
+        <div class="item6">
+            <div class="divdesafios">
+                <div class="panel-desafios">
+                    <strong id="nombre-desafio">Nombre desafio</strong>
+                    <span id="descripcion">Desafio semanal</span>
+                    <a href="#" id="enlace-desafio">A jugar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% if messages %}
+    <script>
+        {% for message in messages %}
+            {% if 'welcome_back' in message.extra_tags %}
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Bienvenido de vuelta!',
+                    text: "{{ message }}",
+                    confirmButtonText: 'Entendido',
+                    customClass: {
+                        title: 'custom-title-class',
+                    }
+                }).then((result) => {
+                    // Redirige independientemente de cómo se cierre el alert
+                    window.location.href = "/repaso/";
+                });
+            {% else %}
+                Swal.fire({
+                    icon: '{{ message.tags }}',
+                    title: '¡Bienvenido de vuelta!',
+                    text: "{{ message }}",
+                    customClass: {
+                        title: 'custom-title-class',
+                    }
+                });
+            {% endif %}
+        {% endfor %}
+    </script>
+    {% endif %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="{% static 'inicio.js' %}"></script>
+    <style>
+
+    </style>
+
+</body>
+</html>

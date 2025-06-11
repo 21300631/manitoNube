@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memorama</title>
+    <link rel="stylesheet" href="{% static 'desafios.css'%}">
+    <link rel="stylesheet" href="{% static 'memorama.css'%}">
+
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="instruccion">
+        <span>
+            Memorama
+        </span>
+    </div>
+    <div class="contenido memo">
+        <div class="tarjetas m">
+            {% for carta in cartas %}
+              <div class="item" data-id="{{ carta.id }}" data-tipo="{{ carta.tipo }}">
+                  <div class="front"></div>
+                  <div class="back">
+                    {% if carta.tipo == "imagen" %}
+                      {% if carta.es_video %}
+                        <video src="{{ carta.contenido }}" autoplay loop muted width="80%"></video>
+                      {% else %}
+                        <img src="{{ carta.contenido }}" alt="{{ carta.texto}}" width="80%">
+                      {% endif %}
+                    {% else %}
+                      <span>{{ carta.contenido }}</span>
+                    {% endif %}
+                  </div>
+              </div>
+            {% endfor %}
+        </div>
+        <!-- Añade esto en tu memorama.html -->
+        <input type="hidden" id="request-path" value="{{ request_path }}">
+        <input type="hidden" id="total-pares" value="{{ total_pares }}">
+    </div>
+    <div class="extras mem">
+        <a class="cancelarM" href="/inicio/">Cancelar</a>
+    </div>
+    <script src="{% static 'memorama.js'%}"></script>
+</body>
+</html>

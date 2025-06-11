@@ -1,0 +1,761 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+
+
+body.light {
+    background-color: white;
+}
+
+body.dark {
+    background-color: #121212;
+    color: white;
+}
+
+
+.panelIzquierdo{
+    width: 40%;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+}
+
+.arriba{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 60vh;
+}
+
+nav{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 265px;
+    height: 356px;
+
+    background-color: #EF767A;
+    margin: 40px 40px;
+    border-radius: 20px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+nav img{
+    width: 30px;
+    height: 30px;
+    padding: 10px;
+    background-color: #FECBCC;
+    border-radius: 10px;
+    margin-right: 30px;
+
+}
+
+nav a{
+    display: flex;
+    align-items: center;
+    width: 160px;
+
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: #ffffff;
+    margin-top: 30px;
+}
+
+.fotoPerfil {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 100px; /* Aumenté el margen inferior */
+    border-radius: 50%;
+    overflow: visible; /* Cambiado de hidden a visible */
+    border: 3px solid #EF767A;
+    left: -40px;
+    top: -60px;
+}
+
+.foto-perfil {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.foto-form {
+    position: relative;
+}
+
+.cambiar-foto-btn {
+    position: absolute;
+    bottom: -30px; /* Posicionado debajo del círculo */
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 0 0 20px 20px;
+    z-index: 1;
+}
+
+.guardar-cambios-btn {
+    position: absolute;
+    bottom: -70px; /* Debajo del botón de cambiar */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #EF767A;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.guardar-cambios-btn.visible {
+    opacity: 1;
+    visibility: visible;
+    bottom: -90px;
+}
+
+#id_nueva_imagen {
+    display: none;
+}
+
+.divnotificaciones{
+    width: 500px;
+}
+
+.panelNotificaciones{
+    width: 430px;
+    height: 200px;
+    border-radius: 32px;
+    margin: 40px 45px;
+    color: black;
+
+    background-color: #7DF5DD;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+
+}
+
+.panelNotificaciones div{
+    display: flex;
+    align-items: center;
+    width: 430px;
+    height: 50px;
+    border-radius: 32px 32px 0px 0px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+
+    background-color: #23F0C7;
+}
+
+.panelNotificaciones div p{
+    margin-left: 30px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.panelNotificaciones ul{
+    list-style-type: none;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.notificacion-item:first-of-type{
+    margin-top: 15px;
+}
+
+.notificacion-item{
+    margin-bottom: 15px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #23F0C7;
+}
+
+
+/* Opcional: estilo del scrollbar */
+.panelNotificaciones ul::-webkit-scrollbar {
+    width: 8px;
+}
+
+.panelNotificaciones ul::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.panelNotificaciones ul::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.panelNotificaciones ul::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+.panelDerecho{
+    width: 60%;
+    height: 100vh;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+
+.arribaD{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 30vh;
+}
+
+.derecha{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100vh;
+}
+
+.panelDerecho .panel-perfil{
+    display: flex;
+    width: 50%;
+}
+
+
+.nombre-usuario{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.nombre-usuario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-username {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    background: white;
+}
+
+.btn-guardar-nombre {
+    background: #EF767A;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-guardar-nombre:hover {
+    background: #e86468;
+}
+
+
+.medalla{
+    display: flex;
+    position: absolute;
+    left: 590px;
+}
+
+.medalla img{
+    height: 40px;
+    width: 40px;
+
+}
+
+.racha{
+    display: flex;
+    margin-left: 20%;
+}
+
+.racha img{
+
+    height: 40px;
+    width: 40px;
+
+}
+
+.dias-racha{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+
+.divpuntos{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 444px;
+    color: black;
+}
+
+.panel-puntos{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    width: 360px;
+    height: 100px;
+    border-radius: 20px;
+
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    background-color: #D9D9D9;
+}
+
+
+.texto-puntos{
+    display: flex;
+    width: 360px;
+    height: 90px;
+}
+
+.texto-puntos img{
+    width: 50px;
+    height: 50px;
+    padding: 20px;
+}
+
+.texto-puntos p{
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    margin-top: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.texto-puntos span{
+    margin-left: 20px;
+}
+
+
+/* Estilos para el toggle switch */
+
+.panel-claroOscuro{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 60px;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.medio{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10vh;
+}
+
+.insigniasLabel{
+    width: 50%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+
+}
+
+.claroOscLabel{
+    width: 20%;
+    margin-left: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+}
+
+@media (max-width: 480px) {
+    
+}
+
+.insignias {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(80px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    background-color: #e86468;
+    border-radius: 20px;
+}
+
+.insignia-item {
+    background-color: #FECBCC;
+    height: auto;
+    padding: 10px;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.insignia-item:hover {
+    transform: scale(1.1);
+}
+
+.insignia-item img {
+    width: 60px;
+    height: 60px;
+}
+
+.tooltip {
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+
+.cerrar-sesion-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    padding: 10px;
+    background-color: #FECBCC;
+    color: #EF767A;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 10px;
+    margin-top: 20px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.cerrar-sesion-btn img {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.cerrar-sesion-btn:hover {
+    background-color: #EF767A;
+    color: white;
+    transform: scale(1.05);
+}
+
+
+.panelNotificaciones ul {
+    list-style-type: none;
+    font-family: Arial, Helvetica, sans-serif;
+    max-height: 150px; /* Ajusta este valor según necesites */
+    overflow-y: auto; /* Habilita el scroll vertical */
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    padding: 0; /* Elimina el padding por defecto */
+    margin: 0; /* Elimina el margen por defecto */
+}
+
+/* Opcional: estilo del scrollbar */
+.panelNotificaciones ul::-webkit-scrollbar {
+    width: 8px;
+}
+
+.panelNotificaciones ul::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.panelNotificaciones ul::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.panelNotificaciones ul::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+/* Estilos base (mantén los que ya tienes) */
+
+/* Responsividad */
+@media (max-width: 1200px) {
+  .panelIzquierdo, .panelDerecho {
+    position: static;
+    width: 100%;
+    height: auto;
+  }
+  
+  .panelIzquierdo {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .arriba {
+    flex-direction: column;
+    height: auto;
+    margin-bottom: 30px;
+  }
+  
+  .fotoPerfil {
+    position: static;
+    margin: 20px auto;
+    left: 0;
+    top: 0;
+  }
+  
+  .divnotificaciones {
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .panelNotificaciones {
+    width: 100%;
+    margin: 20px 0;
+  }
+  
+  .panelNotificaciones div {
+    width: 100%;
+  }
+  
+  .divnavegador{
+    width: 100%;
+    height: 20vh;
+  }
+
+  nav{
+    width: 100%;
+    height: 100%;
+  }
+  .panelDerecho {
+    padding: 20px;
+  }
+  
+  .arribaD {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .panel-perfil {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .derecha {
+    width: 100%;
+    height: auto;
+  }
+  
+  .divpuntos {
+    width: 100%;
+    max-width: 444px;
+  }
+  
+  .panel-puntos {
+    position: relative;
+    height: 150px;
+  }
+  
+  .medalla {
+    position: static;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  
+  .racha {
+    margin-left: 0;
+    justify-content: center;
+  }
+  
+  .medio {
+    flex-direction: column;
+    height: auto;
+    padding: 20px 0;
+  }
+  
+  .insigniasLabel, .claroOscLabel {
+    width: 100%;
+    text-align: center;
+    margin: 10px 0;
+  }
+  
+  .panel-claroOscuro {
+    margin-top: 15px;
+  }
+  
+  .insignias {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  nav {
+    flex-direction: row;
+    width: 100%;
+    margin: 20px 0;
+  }
+  
+  nav a {
+    width: 100%;
+    margin: 15px 0;
+    justify-content: center;
+  }
+  
+  nav a span {
+    display: none; /* Ocultar el texto */
+  }
+  
+  .fotoPerfil {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .nombre-usuario {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .btn-guardar-nombre {
+    margin-top: 10px;
+  }
+  
+  .panel-puntos {
+    width: 100%;
+  }
+  
+  .texto-puntos {
+    width: 100%;
+    flex-direction: column;
+    text-align: center;
+    height: auto;
+  }
+  
+  .texto-puntos p {
+    margin: 10px 0;
+  }
+  
+  .insignias {
+    grid-template-columns: repeat(2, minmax(80px, 1fr));
+  }
+  
+  .cerrar-sesion-btn {
+    margin: 20px auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .fotoPerfil {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .cambiar-foto-btn {
+    bottom: -25px;
+    padding: 5px;
+    font-size: 12px;
+  }
+  
+  .guardar-cambios-btn {
+    padding: 8px 15px;
+    font-size: 12px;
+  }
+  
+  .panelNotificaciones {
+    height: auto;
+    max-height: 300px;
+  }
+  
+  .notificacion-item {
+    margin: 10px 0;
+    padding: 8px;
+  }
+  
+  .insignias {
+    grid-template-columns: repeat(2, minmax(70px, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .insignia-item img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .tooltip {
+    font-size: 12px;
+  }
+  
+  .switch {
+    width: 50px;
+    height: 28px;
+  }
+  
+  .slider:before {
+    width: 20px;
+    height: 20px;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(22px);
+  }
+}

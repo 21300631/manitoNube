@@ -1,0 +1,67 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Felicidades!</title>
+    <style href="{% static 'finalizado.css' %}"></style>
+    <link rel="stylesheet" href="{% static 'finalizado.css'%}">
+
+</head>
+<body class="light">
+    <div class="todo">
+        <div class="instruccion">
+            <h1>¡Felicidades!</h1>
+        </div>
+        <div class="contenido">
+            <div class="progreso-completo">
+                <div class="circulo-progreso">
+                    100%
+                </div>
+            </div>
+            <div class="icono-felicidades">🎉</div>
+            <p>¡Has completado todos los ejercicios con éxito!</p>
+            <form method="POST" action="{% url 'reiniciar_progreso' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-volver">Volver al inicio</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Pequeño efecto de confeti
+        function crearConfeti() {
+            const colores = ['#3C91E6', '#61A8EC', '#BCDCFB', '#FFD166', '#06D6A0', '#EF476F'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confeti = document.createElement('div');
+                confeti.className = 'confetti';
+                confeti.style.left = Math.random() * 100 + 'vw';
+                confeti.style.top = -10 + 'px';
+                confeti.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
+                confeti.style.width = Math.random() * 10 + 5 + 'px';
+                confeti.style.height = Math.random() * 10 + 5 + 'px';
+                confeti.style.opacity = Math.random() + 0.5;
+                document.body.appendChild(confeti);
+                
+                const animacion = confeti.animate([
+                    { top: -10 + 'px', transform: 'rotate(0deg)' },
+                    { top: 100 + 'vh', transform: 'rotate(' + Math.random() * 360 + 'deg)' }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    delay: Math.random() * 2000
+                });
+                
+                animacion.onfinish = () => confeti.remove();
+            }
+        }
+        
+        // Lanzar confeti al cargar la página
+        window.onload = function() {
+            crearConfeti();
+            setInterval(crearConfeti, 3000);
+        };
+    </script>
+</body>
+</html>

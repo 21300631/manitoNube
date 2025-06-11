@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicacion</title>
+    <link rel="stylesheet" href="{% static 'publicacion.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="todo">
+        <div class="panelIzquierdo">
+            <div class="navegador">
+                <nav>
+                    <a href="/inicio/"><img src="{% static 'casa.png'%}" alt="1"></a>
+                    <a href="/foro/"><img src="{% static 'foro.png'%}" alt=""></a>
+                    <a href="/repaso/"><img src="{% static 'libro.png'%}" alt=""></a>
+                    <a href="/perfil/"><img src="{% static 'usuario.png'%}" alt=""></a> 
+                </nav>        
+            </div>
+            <a href="/foro/" class="volver">
+                Volver
+            </a>
+        </div>
+        <div class="panelDerecho">
+            <form action="/publicacion/new/ " method="POST" enctype="multipart/form-data"> 
+                {% csrf_token %}
+
+                <div class="panel-publicacion">
+                    <p>Tema nuevo</p>
+                    <div class="titulo">
+                        <input type="text" name="titulo" placeholder="Inserta aqui tu titulo." value="{{ titulo }}">
+                    </div>
+                    <div class="contenido">
+                        <textarea name="contenido" id=""  rows="10" placeholder="Descripción de tu tema o duda."  value="{{ contenido }}"></textarea>
+                        <input type="file" name="media" id="media" accept="image/*,video/*">
+
+                    </div>
+                    <div class="hashtags">
+                        <textarea name="hashtags" id="" rows="3" placeholder="Agrega algunos hastags para que les sea más fácil a otros usuarios encontrar tu discusión. Ejemplo: #manito #hogar #escuela" value="{{ hashtags }}"></textarea>
+                    </div>
+                    <div class="botones">
+                        <button id="submit-btn">Publicar</button>
+                        <button>Cancelar</button>
+                    </div> 
+                </div>
+            </form>    
+            <input type="hidden" id="user-edad" value="{{ edad }}">
+
+        </div>
+    </div>
+    {% if error %}
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: "{{ error }}",
+        });
+    </script>
+    {% endif %}
+    <script src="{% static 'publicacion.js' %}"></script>
+    {% if messages %}
+    <script>
+        {% for message in messages %}
+        Swal.fire({
+            title: 'Genial!',
+            text: '{{ message }}',
+            icon: '{{ message.tags }}',
+            confirmButtonText: 'OK'
+        });
+        {% endfor %}
+    </script>
+    {% endif %}
+</body>
+</html>

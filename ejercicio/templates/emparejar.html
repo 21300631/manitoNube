@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emparejar</title>
+    <link rel="stylesheet" href="{% static 'e03.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
+
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}" 
+      data-url-verificacion="{% url 'verificar_emparejar' %}" 
+      data-url-siguiente="{% url 'siguiente_ejercicio' %}">
+
+    <div class="todo">
+        <div class="instruccion">
+            <span>{{ texto_instruccion }}</span>
+        </div>
+        <div class="contenido">
+            <div class="panel-barra">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar" data-progreso-inicial="{{ request.session.progreso|default:0 }}"></div>
+                </div>
+            </div>
+            <div class="panel2">
+                <div class="palabras">
+                    {% for palabra in palabras %}
+                        <div data-id="{{ palabra.id }}" class="palabra">{{ palabra.palabra }}</div>
+                    {% endfor %}
+                </div>
+                <div class="gestos">
+                    {% for gesto in gestos %}
+                        <div class="gesto" data-id="{{ gesto.objeto.id }}">
+                            {% if gesto.es_video %}
+                                <video src="{{ gesto.url }}" autoplay loop muted width="80%"></video>
+                            {% else %}
+                                <img src="{{ gesto.url }}" alt="Gesto" width="80%">
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div method="POST" class="panel-btn">
+                    <form action="{% url 'reiniciar_progreso' %}">
+                        {% csrf_token %}
+
+                        <button class="btn-salir">Salir</button>
+                    </form>
+                    <button id="btn-verificar" disabled>Verificar</button>
+                    <div id="feedback"> {{mensaje}}</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{% static 'emparejar.js' %}"></script>
+</body>
+</html>

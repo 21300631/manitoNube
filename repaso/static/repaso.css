@@ -1,0 +1,233 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.instruccion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFE96A;
+    height: 97px;
+    width: 100%;
+}
+
+.instruccion p {
+    text-align: center;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.contenido {
+    display: flex;
+    height: 87vh;
+    width: 100%;
+}
+
+.media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.panel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.ejercicio {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 70vh;
+}
+
+.referencia {
+    margin-top: 80px;
+    width: 40%;
+    height: 55vh;
+    background-color: #FFEF8E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.usuario {
+    margin-top: 80px;
+    width: 40%;
+    height: 55vh;
+    background-color: #FFEF8E;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.panel-btn {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    height: 20vh;
+    width: 100%;
+}
+
+.btn-no-recuerdo {
+    /* position: absolute; */
+    /* right: 0; */
+    width: 180px;
+    height: 70px;
+    background-color: #FFEF8E;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.btn-grabar{
+    margin-left: 10%;
+}
+
+body.light {
+    background-color: white;
+    color: black;
+}
+
+body.dark {
+    background-color: #121212;
+    color: white;
+}
+
+/* --- Nuevos estilos para la detección de gestos --- */
+#outputCanvas {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    background-color: #000;
+    border-radius: 8px;
+}
+
+.btn-container{
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn-grabar {
+    /* position: absolute; */
+    bottom: 20px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.btn-grabar:hover {
+    background-color: #c0392b;
+}
+
+.btn-grabar:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+#countdown, #recordingTimer {
+    position: absolute;
+    top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #e74c3c;
+    z-index: 10;
+}
+
+.salir{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #FFEF8E;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Ajustes para modo oscuro */
+body.dark .usuario,
+body.dark .referencia {
+    background-color: #333;
+}
+
+body.dark .btn-salir {
+    background-color: #444;
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ejercicio {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 70vh;
+    }
+
+    .todo {
+        height: 100vh;
+    }
+
+    .contenido {
+        height: 90vh;
+    }
+
+    .panel {
+        height: 100%;
+    }
+
+    .referencia {
+        width: 80%;
+        height: 20vh;
+    }
+
+    .usuario {
+        width: 80%;
+        height: 20vh;
+    }
+
+    .panel-btn {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-salir {
+        margin-right: 0;
+        position: initial;
+    }
+    
+    /* Ajustes específicos para móvil */
+    #outputCanvas {
+        max-height: 18vh;
+    }
+    
+    .btn-grabar {
+        padding: 8px 16px;
+        font-size: 14px;
+        bottom: 10px;
+    }
+    
+    #countdown, #recordingTimer {
+        font-size: 20px;
+    }
+}

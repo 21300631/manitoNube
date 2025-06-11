@@ -1,0 +1,202 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.todo{
+    background-color: #BCDCFB;
+}
+body.light {
+    background-color: #BCDCFB;
+}
+
+body.dark {
+    background-color: #1a1a1a;
+    color: white;
+}
+
+.instruccion{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3C91E6;
+    height: 97px;
+    width: 100%;
+}
+.instruccion span{
+    text-align: center;
+    color: #fff;
+    font-family:  Arial;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.contenido{
+    display: flex;
+    height: 641px;
+    width: 100%;
+}
+
+.panel-barra{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 100%;
+}
+
+.progress-container {
+    height: 550px; /* Altura del contenedor */
+    width: 50px; /* Ancho del contenedor */
+    background-color: #61A8EC;
+    border-radius: 40px;
+    overflow: hidden;
+    margin: 20px 0;
+    position: relative;
+}
+
+.progress-bar{
+    width: 100%;
+    height: 0%; /* La altura se ajustará dinámicamente */
+    background-color: #3C91E6;
+    transition: height 0.5s ease-in-out;
+    position: absolute;
+    bottom: 0; /* La barra crece desde abajo */
+}
+
+
+.panel2{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.panel-btn{
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    height: 140px;
+    width: 100%;
+}
+
+
+.btn-salir{
+    position: absolute;
+    right: 0;
+    top: 40px;
+
+    margin-right: 100px;
+    width: 140px;
+    height: 70px;
+    background-color: #61A8EC;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    font-size: 18px;
+}
+
+
+.ejercicio{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    height: 70vh;
+    justify-items: center;
+    align-items: center;
+}
+
+.card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3C91E6;
+    border-radius: 10px;
+    width: 80%;
+    height: 50%;
+}
+
+.card:hover{
+    background-color: #0673e0;
+    cursor: pointer;
+}   
+
+
+
+.card.correcto {
+    border: 3px solid limegreen;
+    animation: pop 0.3s ease;
+}
+
+.card.incorrecto {
+    border: 3px solid red;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+
+@media (min-width: 768px) {
+    .contenido {
+        flex-direction: row;
+    }
+    
+    .panel-barra {
+        width: 150px;
+        height: 100%;
+        padding: 0;
+    }
+    
+    .progress-container {
+        height: 550px;
+        width: 50px;
+        margin: 20px 0;
+    }
+    
+    .progress-bar {
+        height: 0%;
+        width: 100%;
+        bottom: 0;
+        top: auto;
+    }
+    
+    .panel-btn {
+        height: 140px;
+    }
+    
+    .btn-salir {
+        margin-right: 100px;
+        width: 140px;
+        height: 70px;
+        font-size: 18px;
+    }
+    
+    .ejercicio {
+        grid-template-columns: repeat(3, 1fr);
+        height: calc(100% - 140px);
+        padding: 0;
+    }
+    
+    .card {
+        height: 50%;
+        max-width: 80%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .instruccion span {
+        font-size: 28px;
+    }
+}

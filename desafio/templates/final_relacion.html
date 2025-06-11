@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado del Desafío</title>
+    <link rel="stylesheet" href="{% static 'resultado.css' %}">
+</head>
+<body class="light">
+
+    <div class="contenedor-resultado">
+        <h1>🎉 ¡Felicidades!</h1>
+
+        <div class="datos-finales">
+            <p>Puntuación total: <strong>{{ puntaje }}</strong></p>
+        </div>
+
+        <a href="/inicio/" class="boton-volver">Ir al inicio</a>
+    </div>
+
+</body>
+</html>

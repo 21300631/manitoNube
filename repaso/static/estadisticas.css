@@ -1,0 +1,178 @@
+/* Estilos base - Manteniendo tu esquema de colores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: white;
+    color: #333;
+}
+
+body.dark {
+    background-color: #121212;
+    color: #f5f5f5;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 2rem;
+    color: #2c3e50;
+    font-size: 2rem;
+    background-color: #FFE96A;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+body.dark h1 {
+    color: #121212;
+    background-color: #FFE96A; /* Mantenemos el amarillo en modo oscuro */
+}
+
+/* Contenedor del gráfico - Estilo acorde al repaso */
+.chart-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #FFEF8E;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body.dark .chart-container {
+    background-color: #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Estadísticas detalladas - Tarjetas estilo repaso */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.stat-card {
+    background-color: #FFEF8E;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+body.dark .stat-card {
+    background-color: #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin: 0.5rem 0;
+}
+
+body.dark .stat-value {
+    color: #f5f5f5;
+}
+
+.stat-label {
+    color: #7f8c8d;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.correct {
+    color: #27ae60; /* Verde más suave que combine */
+}
+
+.incorrect {
+    color: #e74c3c; /* Rojo que ya usas */
+}
+
+/* Botón - Estilo consistente con tu repaso */
+.btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background-color: #FFE96A;
+    color: #2c3e50;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+    background-color: #f5e05e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+body.dark .btn {
+    color: #121212;
+}
+
+/* Ajustes para el gráfico de pie */
+canvas {
+    max-height: 300px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+        padding: 0.8rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-value {
+        font-size: 1.8rem;
+    }
+    
+    .chart-container {
+        width: 95%;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-value {
+        font-size: 1.6rem;
+    }
+    
+    .btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}

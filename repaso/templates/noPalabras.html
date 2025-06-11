@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas de Repaso</title>
+    <link rel="stylesheet" href="{% static 'estadisticas.css'%}">
+</head>
+
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="container">
+        <h1>Resultados de tu Repaso</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Aún no hay nada que repasar, sigue practicando</div>
+            </div>
+            
+            </div>
+        </div>
+        
+        
+        <a href="/inicio/" class="btn" style="display: flex; justify-self: center;">Volver al Inicio</a>
+    </div>
+</body>
+</html>

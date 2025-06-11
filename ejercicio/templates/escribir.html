@@ -1,0 +1,61 @@
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ejercicio1</title>
+        <link rel="stylesheet" href="{% static 'e05.css'%}">
+        <link rel="icon" href="{% static 'images/favicon.ico' %}">
+
+    </head>
+    <body class="{{ theme }}" data-theme="{{ theme }}" data-url-siguiente="{% url 'siguiente_ejercicio' %}">
+
+        <div class="todo">
+            <div class="instruccion">
+                <span>{{ texto_instruccion }}</span>
+            </div>
+            <div class="contenido">
+                <div class="panel-barra">
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar" data-progreso-inicial="{{ request.session.progreso|default:0 }}"></div>
+                    </div>
+                </div>
+                <div class="panel2">
+                    <div class="ejercicio">
+                        <div class="gesto">
+                            {% if es_video %}
+                                <video src="{{ gesto_url }}" autoplay muted loop width="80%" alt="Gesto de {{ palabra_correcta }}"></video>
+                            {% else %}
+                                <img src="{{ gesto_url }}" alt="Gesto de {{ palabra_correcta }}" width="80%" padding="10%" margin="0">
+                            {% endif %}
+                        </div>
+                        <div class="texto">
+                            <form class="respuesta" method="post" action="{% url 'verificar_escribir' %}">
+                                {% csrf_token %}
+                                <input type="text" name="respuesta_usuario" class="input" placeholder="Escribe la palabra aquí" required>
+                                <button type="submit" class="btn-verificar">Verificar</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="panel-btn">
+                        <div id="resultadoEscribir" class="resultado"></div>
+                        <form  method="POST" action="{% url 'reiniciar_progreso' %}">
+                            {% csrf_token %}
+
+                            <button class="btn-salir">Salir</button>
+                        </form>
+                        <form method="post" action="{% url 'siguiente_ejercicio' %}">
+                            {% csrf_token %}
+                            <button style="display: none;" type="submit">Siguiente</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="{% static 'escribir.js' %}"></script>
+
+    </body>
+    </html>

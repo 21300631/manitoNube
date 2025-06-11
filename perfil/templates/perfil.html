@@ -1,0 +1,166 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inicio</title>
+    <link rel="stylesheet" href="{% static 'perfil.css'%}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="panelIzquierdo">
+        <div class="arriba">
+            <div class="divnavegador">
+                <nav>
+                    
+                    <a href="/inicio/"><img src="{% static 'casa.png'%}" alt="1">
+                      <span>Inicio</span>  
+                    </a>
+                    <a href="/foro/"><img src="{% static 'foro.png'%}" alt=""> 
+                        <span>Foro</span>
+                    </a>
+                    <a href="/repaso/"><img src="{% static 'libro.png'%}" alt="">
+                         <span>Repaso</span>
+                        </a>
+                    <a href="/perfil/"><img src="{% static 'usuario.png'%}" alt=""> 
+                        <span>Perfil</span>
+                    </a>
+    
+                </nav>            
+            </div>
+            <div class="fotoPerfil">
+                <img class="foto-perfil" src="{{ imagen.url }}" alt="Foto de perfil" id="preview-imagen">
+                <form method="post" enctype="multipart/form-data" action="{% url 'cambiar_foto_perfil' %}" class="foto-form">
+                    {% csrf_token %}
+                    <label for="id_nueva_imagen" class="cambiar-foto-btn">
+                        <i class="fas fa-camera"></i> Cambiar foto
+                        <input type="file" id="id_nueva_imagen" name="nueva_imagen" accept="image/*">
+                    </label>
+                    <button type="submit" class="guardar-cambios-btn">
+                        <i class="fas fa-square"></i> Guardar
+                    </button>
+                </form>
+                
+            </div>
+        </div>
+        
+        <div class="divnotificaciones">
+            <div class="panelNotificaciones">
+                <div><p>Tus notificaciones</p></div>
+                <ul>
+                    {% for noti in notificaciones %}
+                        <li class="notificacion-item">
+                            <p>
+                                <strong class="usuario-notificacion">{{ noti.emisor.username }}</strong>
+                                {% if noti.tipo == 'like' %}
+                                    le dio me gusta a tu publicación.
+                                {% elif noti.tipo == 'comentario' %}
+                                    respondió a tu publicación.
+                                {% elif noti.tipo == 'reporte' %}
+                                    reportó tu publicación.
+                                {% endif %}
+                            </p>
+                        </li>
+                    {% empty %}
+                        <li><p>No tienes notificaciones nuevas.</p></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panelDerecho">
+        <div class="arribaD">
+            <div class="panel-perfil">
+                <form name="form_cambiar_nombre" method="POST" action="{% url 'cambiar_nombre' %}">
+                    {% csrf_token %}
+                    <div class="nombre-usuario">
+                        <input type="text" 
+                               name="nuevo_username" 
+                               value="{{ usuario.username }}" 
+                               class="input-username"
+                               id="username-input"
+                               required>
+                        
+                        <button type="submit" class="btn-guardar-nombre">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                    </div>
+                </form>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button style="margin-left: 10%;" type="submit" class="btn-guardar-nombre">
+                        <i class="fa-solid fa-square-xmark"></i>
+                        Cerrar sesión
+                    </button>
+                </form>
+
+                {% if perfil.medalla %}
+                <div class="medalla">
+                    <img src="{{ medalla.imagen.url }}" alt="Medalla {{ medalla.nombre }}">
+                    <span class="tooltip">{{ medalla.nombre }}</span>
+                </div>
+                {% endif %}
+
+                <div class="racha">
+                    <img src="{% static 'fuego.png'%}" alt="">
+                    <span class="dias-racha">{{ racha }}</span>
+                </div>
+            </div>
+            <div class="derecha">
+                <div class="divpuntos">
+                    <div class="panel-puntos">
+                        <div class="texto-puntos"><img src="{% static 'gema.png'%}" alt=""><p>Siguiente etapa: <span>2</span></p></div>                    
+                    </div>                    
+                </div>
+                
+            </div>
+        </div>
+        <div class="medio">
+            <span class="insigniasLabel">Tus insignias</span>
+
+            <div class="panel-claroOscuro">
+            <span class="claroOscLabel">Modo claro/oscuro</span>
+
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle" checked="true" {% if theme == "dark" %}checked{% endif %}>
+
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+        <div class="panelInsignias">
+            <div class="insignias">
+                {% for insignia in insignias %}
+                    <div class="insignia-item">
+                        <img src="{{ insignia.imagen.url }}" alt="Insignia {{ insignia.nombre }}">
+                        <span class="tooltip">{{ insignia.nombre }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div> 
+        
+       
+    </div>
+    <script src="{% static 'perfil.js' %}"></script>
+    <script>
+        {% if messages %}
+            {% for message in messages %}
+                Swal.fire({
+                    icon: '{% if message.tags == "success" %}success{% else %}error{% endif %}',
+                    title: '{{ message }}',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
+            {% endfor %}
+        {% endif %}
+    </script>
+     
+    
+</body>
+</html>

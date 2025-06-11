@@ -1,0 +1,355 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.todo {
+    background-color: #BCDCFB;
+    min-height: 100vh;
+}
+
+body.light {
+    background-color: #BCDCFB;
+}
+
+body.dark {
+    background-color: #1a1a1a;
+    color: white;
+}
+
+.instruccion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3C91E6;
+    height: 97px;
+    width: 100%;
+    padding: 10px;
+}
+
+.instruccion span {
+    text-align: center;
+    color: #fff;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.contenido {
+    display: flex;
+    height: calc(100vh - 97px);
+    width: 100%;
+}
+
+.panel-barra {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 100%;
+}
+
+.progress-container {
+    height: 550px;
+    width: 50px;
+    background-color: #61A8EC;
+    border-radius: 40px;
+    overflow: hidden;
+    margin: 20px 0;
+    position: relative;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 0%;
+    background-color: #3C91E6;
+    transition: height 0.5s ease-in-out;
+    position: absolute;
+    bottom: 0;
+}
+
+.panel2 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.panel-btn {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    height: 140px;
+    width: 100%;
+    justify-content: space-between;
+    padding-right: 100px;
+}
+
+.btn-salir {
+    width: 140px;
+    height: 70px;
+    background-color: #61A8EC;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    font-size: 18px;
+}
+
+/* Estilos del ejercicio */
+.palabras {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    height: 10vh;
+    align-items: center;
+    justify-items: center;
+}
+
+.palabra {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 50%;
+    padding: 3%;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    border-radius: 10px;
+    background-color: #3C91E6;
+    transition: all 0.3s ease;
+}
+
+.palabra:hover {
+    background-color: #61A8EC;
+    cursor: pointer;
+}
+
+.gestos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    height: 60vh;
+    align-items: center;
+    justify-items: center;
+}
+
+.gesto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3C91E6;
+    border-radius: 10px;
+    width: 80%;
+    height: 50%;
+    transition: all 0.3s ease;
+}
+
+.gesto:hover {
+    background-color: #61A8EC;
+    cursor: pointer;
+}
+
+/* Estilos de selección y emparejamiento */
+.palabra.seleccionada, 
+.gesto.seleccionado,
+.palabra.seleccionada, 
+.gesto.seleccionada {
+    background-color: #e2e3e5;
+    border: 2px solid #d3d6d8;
+}
+
+.palabra.emparejada, 
+.gesto.emparejada {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.correcto {
+    background-color: #d4edda !important;
+    border: 3px solid #28a745 !important;
+    color: #155724;
+    font-weight: bold;
+}
+
+.incorrecto {
+    background-color: #f8d7da !important;
+    border: 3px solid #dc3545 !important;
+    color: #721c24;
+    font-weight: bold;
+}
+
+/* Estilos para pares emparejados */
+.pareado-1 { background-color: #a0d8f1; border: 2px solid #4ca3dd; }
+.pareado-2 { background-color: #a2a8e0; border: 2px solid #272797; }
+.pareado-3 { background-color: #ffe0b2; border: 2px solid #ffb74d; }
+.pareado-4 { background-color: #a0d8f1; border: 2px solid #4ca3dd; }
+.pareado-5 { background-color: #c1a2e0; border: 2px solid #5b2797; }
+.pareado-6 { background-color: #ffe0b2; border: 2px solid #ffb74d; }
+
+/* Botón de verificación */
+#btn-verificar {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+#btn-verificar:hover {
+    background-color: #0069d9;
+}
+
+#btn-verificar:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Feedback */
+#feedback {
+    display: flex;
+    align-self: center;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 10px;
+    margin: 10px 0;
+    margin-left: 10%;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#feedback.correcto {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+#feedback.incorrecto {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Media Queries para pantallas pequeñas */
+@media (max-width: 1024px) {
+    .palabra, .gesto {
+        font-size: 20px;
+    }
+    
+    .btn-salir {
+        width: 120px;
+        height: 60px;
+        font-size: 16px;
+    }
+
+    img{
+        width: 50%;
+    }
+    video{
+        width: 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .contenido {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .panel-barra {
+        width: 100%;
+        height: auto;
+        padding: 20px 0;
+    }
+    
+    .progress-container {
+        height: 50px;
+        width: 80%;
+        max-width: 400px;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        width: 0%;
+        bottom: auto;
+        transition: width 0.5s ease-in-out;
+    }
+    
+    .panel2 {
+        height: auto;
+        padding-bottom: 140px;
+    }
+    
+    .palabras, .gestos {
+        grid-template-columns: repeat(2, 1fr);
+        height: auto;
+        gap: 15px;
+        padding: 20px;
+    }
+    
+    .palabra, .gesto {
+        width: 90%;
+        height: 80px;
+        font-size: 18px;
+    }
+    
+    .gesto {
+        height: 150px;
+    }
+    
+    .panel-btn {
+        position: relative;
+        height: auto;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        gap: 15px;
+    }
+    
+    .btn-salir {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-right: 0;
+    }
+    
+    #feedback {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .instruccion span {
+        font-size: 20px;
+    }
+    
+    .palabras, .gestos {
+        grid-template-columns: 1fr;
+    }
+    
+    .palabra {
+        height: 60px;
+        font-size: 16px;
+    }
+    
+    .gesto {
+        height: 120px;
+    }
+    
+    #btn-verificar {
+        width: 100%;
+    }
+    
+    #feedback {
+        font-size: 16px;
+    }
+}

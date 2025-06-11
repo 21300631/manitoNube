@@ -1,0 +1,203 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foro</title>
+    <link rel="stylesheet" href="{% static 'foro.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="todo">
+        <div class="panelIzquierdo">
+            <div class="navegador">
+                <nav>
+                    <a href="/inicio/"><img src="{% static 'casa.png'%}" alt="1"></a>
+                    <a href="/foro/"><img src="{% static 'foro.png'%}" alt=""></a>
+                    <a href="/repaso/"><img src="{% static 'libro.png'%}" alt=""></a>
+                    <a href="/perfil/"><img src="{% static 'usuario.png'%}" alt=""></a> 
+                </nav>        
+            </div>
+            <a href="/publicacion/" class="nuevoPost">
+                Crear nuevo Post
+            </a>
+            
+        </div>
+        <div class="panelDerecho">
+            <div class="panelBusqueda">
+
+            </div>
+            <div class="panelPublicaciones">
+                {% for publicacion in publicaciones %}
+                <div class="publicacion">
+                    <div class="detalles">
+                        <h3>Tema: {{ publicacion.titulo }}</h3>
+                        <p>Iniciado por: {{ publicacion.usuario }}</p>
+                        <p>Descripción: {{ publicacion.contenido }}</p>
+                        {% if publicacion.archivo_media %}
+                            {% with publicacion.archivo_media.url as media_url %}
+                                {% if media_url|lower|slice:'-4:' == '.jpg' or media_url|lower|slice:'-5:' == '.jpeg' or media_url|lower|slice:'-4:' == '.png' or media_url|lower|slice:'-4:' == '.gif' %}
+                                    <img src="{{ media_url }}" alt="Imagen de publicación" style="max-width: 100%; height: auto;">
+                                {% elif media_url|lower|slice:'-4:' == '.mp4' or media_url|lower|slice:'-4:' == '.webm' or media_url|lower|slice:'-4:' == '.ogg' %}
+                                    <video controls style="max-width: 40%; height: auto;">
+                                        <source src="{{ media_url }}" type="video/{% if media_url|lower|slice:'-4:' == '.mp4' %}mp4{% elif media_url|lower|slice:'-4:' == '.webm' %}webm{% else %}ogg{% endif %}">
+                                        Tu navegador no soporta el elemento de video.
+                                    </video>
+                                {% else %}
+                                    <a href="{{ media_url }}" target="_blank">Descargar archivo</a>
+                                {% endif %}
+                            {% endwith %}
+                        {% endif %}
+                        <div class="like-reporte">
+                            <button class="btn btn-like" onclick="darLike({{ publicacion.id }})" id="btn-like-{{ publicacion.id }}">
+                                Like
+                            </button>
+                            <label id="like-count-{{ publicacion.id }}">{{ publicacion.likes.count }}</label>
+                    
+                            <button class="btn btn-report" onclick="reportar({{ publicacion.id }})" id="btn-reportar-{{ publicacion.id }}">
+                                Reportar
+                            </button>
+                            <label id="report-count-{{ publicacion.id }}">{{ publicacion.reportes.count }}</label>
+                        </div>
+                       
+                        <form action="{% url 'agregar_comentario' publicacion.id %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <textarea class="inputComentario" name="contenido" rows="2" placeholder="Escribe un comentario..."></textarea>
+                            <div class="archivo-boton">
+                                <input type="file" name="archivo" accept="image/*, video/*">
+                                <button class="comentar" type="submit">Comentar</button>
+                            </div>
+                            
+                        </form>
+                    </div>
+                    <!-- Sección de comentarios -->
+                    <div class="comentarios">
+                        <h4>Comentarios:</h4>
+                        {% for comentario in publicacion.comentarios.all %}
+                        <div class="comentario">
+                            <p><strong>{{ comentario.usuario }}</strong>: {{ comentario.contenido }}</p>
+                            
+                            {% if comentario.archivo %}
+                                {% with comentario.archivo.url as media_url %}
+                                    {% if media_url|lower|slice:'-4:' == '.jpg' or media_url|lower|slice:'-5:' == '.jpeg' or media_url|lower|slice:'-4:' == '.png' or media_url|lower|slice:'-4:' == '.gif' %}
+                                        <div class="media-container">
+                                            <img src="{{ media_url }}" alt="Imagen adjunta" style="max-width: 300px; max-height: 300px;">
+                                        </div>
+                                    {% elif media_url|lower|slice:'-4:' == '.mp4' or media_url|lower|slice:'-5:' == '.webm' or media_url|lower|slice:'-4:' == '.ogg' %}
+                                        <div class="media-container">
+                                            <video controls style="max-width: 200px; max-height: 200px;">
+                                                <source src="{{ media_url }}" type="video/{% if media_url|lower|slice:'-4:' == '.mp4' %}mp4{% elif media_url|lower|slice:'-5:' == '.webm' %}webm{% else %}ogg{% endif %}">
+                                                Tu navegador no soporta el video.
+                                            </video>
+                                        </div>
+                                    {% else %}
+                                        <p>Archivo adjunto: <a href="{{ media_url }}" target="_blank">Descargar archivo</a></p>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                            
+                            <p><small>{{ comentario.fecha_creacion }}</small></p>
+                        </div>
+                        {% empty %}
+                        <p>No hay comentarios aún.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% empty %}
+                <p>No hay publicaciones aún.</p>
+
+                </div>
+
+
+                
+                {% endfor %}
+
+            </div>
+
+        </div>
+        
+    </div>
+    <script>
+        Swal.fire({
+            title: 'Ojo!',
+            text: 'No se garantizan la presición de las respuestas',
+            icon: 'Warning',
+            confirmButtonText: 'OK'
+        });
+    </script>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Verifica si esta cookie empieza con el nombre que buscamos
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        function darLike(publicacionId) {
+            fetch(`{% url 'dar_like' 0 %}`.replace("0", publicacionId), {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Actualizar el contador
+                const label = document.getElementById(`like-count-${publicacionId}`);
+                label.innerText = data.total_likes;
+        
+                // Opcional: cambiar estilo si ya le dio like
+                const button = document.getElementById(`btn-like-${publicacionId}`);
+                // if (data.liked) {
+                //     button.style.backgroundColor = '#3C91E6'; // Cambia el color del botón si le dio like
+                // } else {
+                //     button.style.backgroundColor = '';
+                // }
+            })
+            .catch(error => console.error('Error al dar like:', error));
+        }
+        function reportar(publicacionId) {
+            fetch(`{% url 'reportar' 0 %}`.replace("0", publicacionId), {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.eliminada) {
+                    // Eliminar la publicación del DOM si fue eliminada
+                    const publicacionElement = document.getElementById(`publicacion-${publicacionId}`);
+                    if (publicacionElement) {
+                        publicacionElement.remove();
+                    }
+                } else {
+                    // Actualizar el contador de reportes
+                    const label = document.getElementById(`report-count-${publicacionId}`);
+                    if (label) {
+                        label.innerText = data.total_reportes;
+                    }
+                }
+            })
+            .catch(error => console.error('Error al reportar:', error));
+        }
+    </script>
+        
+</body>
+</html>

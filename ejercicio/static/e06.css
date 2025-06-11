@@ -1,0 +1,337 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.todo {
+    background-color: #BCDCFB;
+    min-height: 100vh;
+}
+
+body.light {
+    background-color: #BCDCFB;
+}
+
+body.dark {
+    background-color: #1a1a1a;
+    color: white;
+}
+
+.instruccion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3C91E6;
+    height: 97px;
+    width: 100%;
+    padding: 10px;
+}
+
+.instruccion span {
+    text-align: center;
+    color: #fff;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.contenido {
+    display: flex;
+    height: calc(100vh - 97px);
+    width: 100%;
+}
+
+.panel-barra {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 100%;
+}
+
+.progress-container {
+    height: 550px;
+    width: 50px;
+    background-color: #61A8EC;
+    border-radius: 40px;
+    overflow: hidden;
+    margin: 20px 0;
+    position: relative;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 0%;
+    background-color: #3C91E6;
+    transition: height 0.5s ease-in-out;
+    position: absolute;
+    bottom: 0;
+}
+
+.panel2 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.panel-btn {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    height: 140px;
+    width: 100%;
+    justify-content: flex-end;
+    padding-right: 100px;
+}
+
+.btn-salir {
+    width: 140px;
+    height: 70px;
+    background-color: #61A8EC;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    font-size: 18px;
+}
+
+/* Estilos del ejercicio */
+.ejercicio {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+    height: calc(100% - 140px);
+}
+
+.gesto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3C91E6;
+    border-radius: 10px;
+    width: 80%;
+    height: 70%;
+    margin: 20px 0;
+}
+
+.g-usuario {
+    position: relative;
+    width: 400px;
+    height: 300px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #f0f0f0;
+}
+
+.g-usuario video,
+.g-usuario canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    z-index: 1;
+}
+
+.g-usuario canvas {
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Estilos para los botones y feedback */
+#nextBtn:disabled {
+    margin-left: 30px;
+    border: none;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #BCDCFB;
+    cursor: not-allowed;
+}
+
+#nextBtn:not(:disabled) {
+    font-size: 18px;
+    margin-left: 30px;
+    background-color: #3C91E6;
+    border: none;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 10%;
+    color: white;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+#webcam {
+    transform: scaleX(-1);
+}
+
+#countdown {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 72px;
+    color: white;
+    text-shadow: 2px 2px 4px black;
+    z-index: 100;
+}
+
+#recordingTimer {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    color: white;
+    background: rgba(0,0,0,0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 100;
+}
+
+.btn-grabar {
+    display: inline-block !important;
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 10px;
+}
+
+.btn-grabar:hover {
+    background-color: #c0392b;
+}
+
+.btn-grabar:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+#feedback {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+}
+
+#feedback.correct {
+    color: #00FF00;
+    background-color: rgba(0, 255, 0, 0.2);
+}
+
+#feedback.incorrect {
+    color: #FF0000;
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+/* Media Queries para pantallas pequeñas */
+@media (max-width: 1024px) {
+    .gesto, .g-usuario {
+        width: 90%;
+        height: 60%;
+    }
+}
+
+@media (max-width: 768px) {
+    .contenido {
+        flex-direction: column;
+        height: auto;
+        min-height: calc(100vh - 97px);
+    }
+    
+    .panel-barra {
+        width: 100%;
+        height: auto;
+        padding: 20px 0;
+    }
+    
+    .progress-container {
+        height: 50px;
+        width: 80%;
+        max-width: 400px;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        width: 0%;
+        bottom: auto;
+        transition: width 0.5s ease-in-out;
+    }
+    
+    .panel2 {
+        height: auto;
+        padding-bottom: 140px;
+    }
+    
+    .ejercicio {
+        grid-template-columns: 1fr;
+        height: auto;
+        gap: 30px;
+        padding: 20px 0;
+    }
+    
+    .gesto, .g-usuario {
+        width: 90%;
+        height: 300px;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .panel-btn {
+        padding-right: 20px;
+    }
+    
+    .btn-salir {
+        width: 120px;
+        height: 60px;
+        font-size: 16px;
+    }
+    
+    .btn-grabar {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .instruccion span {
+        font-size: 20px;
+    }
+    
+    .gesto, .g-usuario {
+        height: 250px;
+    }
+    
+    #feedback {
+        font-size: 18px;
+    }
+    
+    #countdown {
+        font-size: 48px;
+    }
+    
+    #recordingTimer {
+        font-size: 18px;
+    }
+}

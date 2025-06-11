@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repaso</title>
+    <link rel="stylesheet" href="{% static 'repaso.css'%}">
+    
+</head>
+{% load static %}
+<body class="{{ theme }}" data-theme="{{ theme }}">
+    <div class="todo">
+
+        <div class="instruccion">
+            <p id="texto-instruccion">Realiza el gesto correspondiente a la palabra: <strong>{{ palabra.texto }}</strong></p>
+        </div>  
+
+        <div class="contenido">
+            <div class="panel">
+                <div class="ejercicio">
+                    <!-- Panel de referencia -->
+                    <div class="referencia">
+                        <div class="media" id="media-container">
+                            {% if palabra.is_video %}
+                                <video id="gestoVideo" src="{{ palabra.gesto_url }}" muted autoplay loop width="80%" 
+                                       data-palabra="{{ palabra.texto }}" data-palabra-json="{{ palabra.json_url }}"></video>
+                            {% else %}
+                                <img src="{{ palabra.gesto_url }}" alt="{{ palabra.texto }}" width="80%" style="padding: 10%; margin: 0;">
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Panel del usuario -->
+                    <div class="usuario">
+                        <canvas id="outputCanvas" width="600" height="500" style="width: 100%; height: auto; "></canvas>
+                        <video id="inputVideo" autoplay playsinline muted style="display: none;"></video>
+
+                        <div id="countdown" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 72px; color: white; text-shadow: 2px 2px 4px black;"></div>
+                        <div id="recordingTimer" style="display: none; position: absolute; top: 20px; right: 20px; font-size: 24px; color: white; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px;"></div>
+                        <div id="feedback" style="position: absolute; bottom: 20px; width: 100%; text-align: center; font-size: 24px; font-weight: bold; color: white; text-shadow: 1px 1px 2px black; font-family: Arial;"></div>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="btn-container">
+                    <a class="salir" href="/inicio/">Salir</a>
+                    {% if palabra.is_video %}  <!-- Cambiado a is_video para coincidir con tu lógica -->
+                        <button id="recordBtn" class="btn-grabar">Grabar</button>
+                    {% endif %}
+                    <button id="noRecuerdoBtn" class="btn btn-no-recuerdo">No lo recuerdo</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MediaPipe y librerías -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/numeric/numeric.min.js"></script>
+
+    <!-- Variables JS -->
+    <script>
+        const IS_VIDEO_EXERCISE = {{ palabra.is_video|yesno:"true,false" }};
+        const LANDMARKS_JSON_URL = "{{ palabra.json_url }}";
+        const PALABRA_ACTUAL = "{{ palabra.texto }}";
+        const CURRENT_WORD_ID = {{ palabra.id|safe }};
+        const PROGRESS = {
+            current: {{ progreso.actual }},
+            total: {{ progreso.total }}
+        };
+        const CSRF_TOKEN = "{{ csrf_token }}";
+        const NEXT_URL = "{% url 'siguiente_ejercicio_repaso' %}";
+        const FINISH_URL = "{% url 'finalizar_repaso' %}";
+
+        // Cargar JSON solo si no es video
+        let referenceLandmarks = null;
+        if (!IS_VIDEO_EXERCISE) {
+            fetch(LANDMARKS_JSON_URL)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    referenceLandmarks = data;
+                    console.log("Landmarks de referencia cargados");
+                })
+                .catch(error => {
+                    console.error("Error cargando landmarks:", error);
+                    document.getElementById("feedback").textContent = "Error cargando referencia del gesto";
+                });
+        }
+    </script>
+
+    <!-- Script principal -->
+    <script src="{% static 'repaso.js' %}"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const noRecuerdoBtn = document.getElementById('noRecuerdoBtn');
+    
+    noRecuerdoBtn.addEventListener('click', function() {
+        // Mostrar confirmación
+        Swal.fire({
+            title: '¿No recuerdas este gesto?',
+            text: 'Se registrará como error y pasaremos al siguiente ejercicio',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, no lo recuerdo',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Enviar petición al servidor
+                fetch('/repaso/no-recuerdo/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': CSRF_TOKEN
+                    },
+                    body: JSON.stringify({
+                        palabra_id: CURRENT_WORD_ID
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'completed') {
+                        window.location.href = FINISH_URL;
+                    } else {
+                        window.location.reload(); // Recargar para el siguiente ejercicio
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Error', 'Hubo un problema al registrar tu respuesta', 'error');
+                });
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

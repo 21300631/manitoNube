@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeleccionB</title>
+    <link rel="stylesheet" href="{% static 'e02.css'%}">
+</head>
+<body class="{{ theme }}" data-theme="{{ theme }}" data-url-verificacion="{% url 'verificar_seleccion2' %}" data-url-siguiente="{% url 'siguiente_ejercicio' %}">
+    <div class="todo">
+        <div class="instruccion">
+            <span>{{ texto_instruccion }}</span>
+        </div>
+        <div class="contenido">
+            <div class="panel-barra">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar" data-progreso-inicial="{{ request.session.progreso|default:0 }}"></div>
+                </div>
+            </div>
+            <div class="panel2">
+                <div class="ejemplos">
+                    {% for ejemplo in ejemplos %}
+                        <div class="ejemplo">{{ ejemplo|safe }}</div>
+                    {% endfor %}
+                </div>
+                <div class="ejercicio">
+                    {% for opcion in opciones %}
+                        <div class="card" data-id="{{ opcion.id }}">
+                            {% if opcion.es_video %}
+                                <video src="{{ opcion.url }}" autoplay loop muted width="80%"></video>
+                            {% else %}
+                                <img src="{{ opcion.url }}" alt="Gesto de {{ opcion.palabra }}" width="80%">
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="panel-btn">
+                    <form method="POST" action="{% url 'reiniciar_progreso' %}">
+                        {% csrf_token %}
+
+                        <button class="btn-salir">Salir</button>
+                    </form>
+                    <form method="post" action="{% url 'siguiente_ejercicio' %}">
+                        {% csrf_token %}
+                        <button style="display: none;" type="submit">Siguiente</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="{% static 'seleccion2.js' %}"></script>
+</body>
+</html>

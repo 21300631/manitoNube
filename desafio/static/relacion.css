@@ -1,0 +1,95 @@
+
+
+.juego-container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 5% 15%;
+    width: 100%;
+    height: 60vh;
+}
+
+.fila{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    width: 100%;
+    gap: 1%;
+}
+
+.item{
+    border-radius: 10%;
+}
+
+.item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.item.seleccionado {
+    box-shadow: 0 0 0 3px #4CAF50;
+    transform: scale(1.05);
+}
+
+.item.error {
+    box-shadow: 0 0 0 3px #F44336;
+}
+
+.item.acertado {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+}
+
+.item img {
+    max-width: 120px;
+    max-height: 120px;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+
+/* Responsividad */
+@media screen and (max-width: 768px) {
+    .fila {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 0.5rem;
+    }
+
+    .item img {
+        max-width: 80px;
+        max-height: 80px;
+    }
+
+    .instruccion span {
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .juego-container {
+        gap: 2rem 5%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .fila {
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    }
+
+    .item img {
+        max-width: 60px;
+        max-height: 60px;
+    }
+
+    .relojM, .puntaje, .cancelarM {
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .instruccion span {
+        font-size: 0.9rem;
+    }
+}
