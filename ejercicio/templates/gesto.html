@@ -72,9 +72,8 @@
 
     <script>
         const IS_VIDEO_EXERCISE = {{ is_video|yesno:"true,false" }};
-        const LANDMARKS_JSON_URL = "{% static '' %}" + "{{ json_url }}";
+        const LANDMARKS_JSON_URL = "{{ json_url }}";
         const PALABRA_ACTUAL = "{{ palabra_correcta }}";
-        const PALABRA_ACTUAL_JSON = {{ json_url }};
 
         
         // Solo cargamos landmarks si NO es un video
