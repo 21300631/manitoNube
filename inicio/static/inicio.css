@@ -13,6 +13,10 @@ body.dark {
     color: white;
 }
 
+body.dark .medalla {
+    background-color: #FECBCC;
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: 25vw 45vw 30vw;
@@ -87,13 +91,16 @@ nav a{
 
 .medalla{
     display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 8%;
     position: absolute;
-    background-color: #FECBCC;
     height: 6vh;
     width: auto;
     right: 20%;
 }
+
+
 
 .medalla img{
     height: 70%;
@@ -448,8 +455,11 @@ p span{
     margin: 20px 0px 10px;
     text-align: center;
 }
+
 /* VERSIÓN MÓVIL MEJORADA */
 @media (max-width: 768px) {
+
+
     .grid-container {
         display: grid;
         grid-template-columns: 1fr;
@@ -525,6 +535,8 @@ p span{
         padding: 8px;
         border-radius: 20px;
     }
+
+    
     
     /* LECCIONES móvil - scroll horizontal */
     .panel-lecciones {

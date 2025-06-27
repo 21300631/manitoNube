@@ -10,6 +10,7 @@ from datetime import timedelta
 from django.contrib import messages
 from ejercicio.views import PalabraUsuario
 from perfil.views import Insignia, Logro
+from inicio.models import Medalla
 
 @login_required
 def inicioSesion(request):
@@ -40,6 +41,28 @@ def inicioSesion(request):
     perfil.save()
 
     medalla = getattr(perfil, "medalla", None)
+
+    ultimas_senias = PalabraUsuario.objects.filter(usuario=perfil, precision__gte=80).order_by('-fecha_completada')[:4]
+
+    cantidad_precisas = sum(1 for s in ultimas_senias if s.precision >= 80)
+
+    if cantidad_precisas >= 4:
+        nueva_medalla_img = "medallas/oro.png"
+    elif cantidad_precisas == 3:
+        nueva_medalla_img = "medallas/plata.png"
+    elif cantidad_precisas == 2:
+        nueva_medalla_img = "medallas/bronce.png"
+    else:
+        nueva_medalla_img = "medallas/circulo.png"
+
+    try:
+        nueva_medalla = Medalla.objects.get(imagen=nueva_medalla_img)
+        if perfil.medalla != nueva_medalla:
+            perfil.medalla = nueva_medalla
+            perfil.save()
+            print(f"Medalla actualizada a: {nueva_medalla.nombre}")
+    except Medalla.DoesNotExist:
+        print(f"⚠️ Medalla con imagen '{nueva_medalla_img}' no encontrada.")
 
 
     print(f'Racha Usuario {racha}')
@@ -157,6 +180,7 @@ def inicioSesion(request):
             'puntos': perfil.puntos,
             'notificaciones': notificaciones
     }
+    print(f"Medalla del usuario: {perfil.medalla}")
 
     try:
         return render(request, 'inicio.html', contexto)

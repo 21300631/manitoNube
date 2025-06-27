@@ -28,10 +28,9 @@
             <div class="panel-perfil">
                 <img class="foto-perfil" src="{{ imagen.url }}" alt="Foto de perfil">
                 <span class="nombre-usuario">{{ usuario.username }}</span>
-                {% if perfil.medalla %}
+                {% if medalla %}
                 <div class="medalla">
                     <img src="{{ medalla.imagen.url }}" alt="Medalla {{ medalla.nombre }}">
-                    <span class="tooltip">{{ medalla.nombre }}</span>
                 </div>
                 {% endif %}
                 <div class="racha">
