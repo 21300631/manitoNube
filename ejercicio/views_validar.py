@@ -2,9 +2,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.views.decorators.http import require_POST
-from .models import Palabra
-from django.shortcuts import redirect
+from .models import Palabra, PalabraUsuario
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required
+
 
 
 def check_auth(user):
@@ -27,7 +28,6 @@ def verificar_seleccion(request):
         es_correcto = opcion_id == ejercicio_actual['palabra']
         
         if es_correcto:
-            # Actualizar progreso solo si es correcto
             if not request.session.get('en_repeticion', False):
                 request.session['progreso'] = min(
                     request.session.get('progreso', 0) + 10, 
@@ -76,7 +76,6 @@ def verificar_seleccion2(request):
         es_correcto = opcion_id == ejercicio_actual['palabra']
         
         if es_correcto:
-            # Actualizar progreso solo si es correcto
             if not request.session.get('en_repeticion', False):
                 request.session['progreso'] = min(
                     request.session.get('progreso', 0) + 10, 
@@ -126,7 +125,6 @@ def verificar_completar(request):
         es_correcto = opcion_id == palabra_correcta_id
         
         if es_correcto:
-            # Actualizar progreso solo si es correcto
             if not request.session.get('en_repeticion', False):
                 request.session['progreso'] = min(
                     request.session.get('progreso', 0) + 10, 
@@ -179,7 +177,6 @@ def verificar_escribir(request):
         es_correcto = respuesta == palabra.palabra.lower()
         
         if es_correcto:
-            # Actualizar progreso solo si es correcto
             if not request.session.get('en_repeticion', False):
                 request.session['progreso'] = min(
                     request.session.get('progreso', 0) + 10, 
@@ -240,7 +237,6 @@ def verificar_emparejar(request):
                 break
         
         if todos_correctos:
-            # Actualizar progreso solo si es correcto
             if not request.session.get('en_repeticion', False):
                 request.session['progreso'] = min(
                     request.session.get('progreso', 0) + 10, 
@@ -272,3 +268,31 @@ def verificar_emparejar(request):
         
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+    
+
+@csrf_exempt  
+@login_required
+def guardar_precision(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        precision = data.get('precision')
+        palabra_id = data.get('palabra_id')
+
+        perfil = request.user.profile
+
+        try:
+            palabra = Palabra.objects.get(id=palabra_id)
+            palabra_usuario, created = PalabraUsuario.objects.get_or_create(usuario=perfil, palabra=palabra)
+            palabra_usuario.precision = precision
+            palabra_usuario.save()
+
+            return JsonResponse({
+                'status': 'ok',
+                'precision': precision,
+                'palabra': palabra.palabra,
+                'nueva': created
+            })
+        except Palabra.DoesNotExist:
+            return JsonResponse({'error': 'Palabra no encontrada'}, status=404)
+    
+    return JsonResponse({'error': 'Método no permitido'}, status=405)

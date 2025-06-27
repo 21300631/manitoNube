@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gesto</title>
     <link rel="stylesheet" href="{% static 'e06.css'%}">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
+
 </head>
 <body class="{{ theme }}" data-theme="{{ theme }}">
     <div class="todo">
@@ -74,7 +76,7 @@
         const IS_VIDEO_EXERCISE = {{ is_video|yesno:"true,false" }};
         const LANDMARKS_JSON_URL = "{{ json_url }}";
         const PALABRA_ACTUAL = "{{ palabra_correcta }}";
-
+        const palabraId = "{{ palabra_id }}";
         
         // Solo cargamos landmarks si NO es un video
         if (!IS_VIDEO_EXERCISE) {

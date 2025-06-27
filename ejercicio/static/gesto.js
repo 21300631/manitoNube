@@ -400,6 +400,23 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (similitudFinal >= 100)
                                 similitudFinal = 100; // Limitar al 100% máximo
 
+                            try {
+                                fetch("/ejercicio/guardar_precision/", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "X-CSRFToken": getCookie("csrftoken")  
+                                    },
+                                    body: JSON.stringify({
+                                        precision: similitudFinal,
+                                        palabra_id: palabraId  
+                                    })
+                                });
+                                if (!response.ok) throw new Error("Error en la respuesta del servidor");
+                            } catch (error) {
+                                console.error("Error al enviar precisión:", error);
+                            }
+
                             const resultMessage = isApproved 
                                 ? `¡Felicidades! Tu ejecución tuvo una similitud del <b>${similitudFinal.toFixed(1)}%</b> con el gesto de referencia. <span style="color:green;">✅ APROBADO</span>`
                                 : `Tu ejecución tuvo una similitud del <b>${similarityPercentage.toFixed(1)}%</b> con el gesto de referencia. <span style="color:red;">❌ NO APROBADO</span> (Se requiere 80% o más)`;
@@ -842,32 +859,54 @@ document.addEventListener('DOMContentLoaded', () => {
                                 showFeedback(`✓ Mantén la pose (${Math.ceil(remainingTime/1000)}s)`, true);
                             } else {
                                 showFeedback("✓ ¡Correcto! Avanzando...", true);
-                                // Actualizar barra de progreso antes de redirigir
-                                actualizarBarraProgreso(10);
-                                // Usar el nombre de la URL definido en Django
-                                setTimeout(() => {
-                                    safeRedirect();
-                                }, 500);
+                                fetch("/ejercicio/guardar_precision/", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "X-CSRFToken": getCookie("csrftoken")  
+                                    },
+                                    body: JSON.stringify({
+                                        precision: currentSimilarity,
+                                        palabra_id: palabraId  
+                                    })
+                                })
+                                .then(response => {
+                                    if (!response.ok) throw new Error("Error en el servidor");
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log("Precisión guardada:", data);
+                                    // Actualizar barra de progreso y redirigir
+                                    actualizarBarraProgreso(10);
+                                    setTimeout(() => {
+                                        safeRedirect();
+                                    }, 500);
+                                })
+                                .catch(error => {
+                                    console.error("Error al guardar precisión:", error);
+                                    // Aún así redirigir (opcional)
+                                    actualizarBarraProgreso(10);
+                                    setTimeout(() => {
+                                        safeRedirect();
+                                    }, 500);
+                                });
+
                             }
                         }
                     }  else {
-                        correctPoseStartTime = null; // Reiniciar si la pose no es correcta
+                        correctPoseStartTime = null; 
 
                         showFeedback(`✗ Ajusta tu gesto (${currentSimilarity.toFixed(0)}%)`, false);
-                        // nextButton.disabled = true;
                         
-                        // Mostrar SweetAlert solo si la similitud es baja y no se ha mostrado recientemente
                         if (currentSimilarity < 50 && !document.getElementById('hand-help-shown')) {
                             showHandHelpAlert();
                         }
                     }
                 }
             } else {
-                correctPoseStartTime = null; // Reiniciar si no hay manos detectadas
+                correctPoseStartTime = null; 
                 showFeedback("Muestra tu mano en el área", false);
-                // nextButton.disabled = true;
                 
-                // Mostrar SweetAlert si no se detecta la mano
                 if (!document.getElementById('hand-help-shown')) {
                     showHandHelpAlert();
                 }
@@ -876,9 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
             canvasCtx.restore();
         });
 
-        // Función para mostrar el SweetAlert de ayuda
         function showHandHelpAlert() {
-            // Creamos un marcador para evitar mostrar múltiples alertas
             const marker = document.createElement('div');
             marker.id = 'hand-help-shown';
             marker.style.display = 'none';
@@ -908,14 +945,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     popup: 'animate__animated animate__fadeOut'
                 },
                 allowOutsideClick: true,
-                timer: 30000, // Se cierra automáticamente después de 10 segundos
+                timer: 30000, 
                 timerProgressBar: true
             }).then(() => {
-                // Eliminar el marcador después de un tiempo para permitir que se muestre nuevamente si es necesario
                 setTimeout(() => {
                     const marker = document.getElementById('hand-help-shown');
                     if (marker) marker.remove();
-                }, 30000); // 30 segundos antes de que pueda mostrarse nuevamente
+                }, 30000); 
             });
         }
 
@@ -964,11 +1000,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.head.appendChild(style);
 
-        // if (nextButton) {
-        //     nextButton.addEventListener('click', () => {
-        //         actualizarBarraProgreso(10);
-        //     });
-        // }
     }
 
     async function actualizarBarraProgreso(porcentaje) {
@@ -1009,23 +1040,23 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Progreso actualizado de ${progresoActual}% a ${nuevoProgreso}%`);
         
         // Guardar en el servidor
-        try {
-            const response = await fetch('/actualizar_progreso/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify({ progreso: nuevoProgreso })
-            });
+        // try {
+        //     const response = await fetch('/actualizar_progreso/', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'X-CSRFToken': getCookie('csrftoken')
+        //         },
+        //         body: JSON.stringify({ progreso: nuevoProgreso })
+        //     });
             
-            if (!response.ok) throw new Error('Error al guardar progreso');
+        //     if (!response.ok) throw new Error('Error al guardar progreso');
             
-            return nuevoProgreso;
-        } catch (error) {
-            console.error("Error al guardar progreso:", error);
-            return nuevoProgreso;
-        }
+        //     return nuevoProgreso;
+        // } catch (error) {
+        //     console.error("Error al guardar progreso:", error);
+        //     return nuevoProgreso;
+        // }
     }
 
     // Función auxiliar para obtener cookies

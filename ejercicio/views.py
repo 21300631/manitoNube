@@ -199,6 +199,7 @@ def preparar_repeticion_ejercicios(request):
     return redirect('mostrar_ejercicio')
 
 @login_required
+@csrf_exempt
 def reiniciar_progreso(request):
     if request.method == "POST":
         # 1. Preservar datos críticos de autenticación

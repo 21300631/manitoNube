@@ -75,6 +75,7 @@
         const CSRF_TOKEN = "{{ csrf_token }}";
         const NEXT_URL = "{% url 'siguiente_ejercicio_repaso' %}";
         const FINISH_URL = "{% url 'finalizar_repaso' %}";
+        const palabraId = CURRENT_WORD_ID; 
 
         // Cargar JSON solo si no es video
         let referenceLandmarks = null;

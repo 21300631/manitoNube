@@ -424,6 +424,23 @@ document.addEventListener('DOMContentLoaded', () => {
                                 similitudFinal = 100; // Limitar al 100% máximo
                             }
 
+                            fetch("{% url 'guardar_precision' %}", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "X-CSRFToken": getCookie("csrftoken")  
+                                },
+                                body: JSON.stringify({
+                                    precision: similitudFinal,
+                                    palabra_id: palabraId  
+                                })
+                            }).then(response => {
+                                // manejar respuesta
+                            }).catch(error => {
+                                console.error("Error al enviar precisión:", error);
+                            });
+
+
                             const resultMessage = isApproved 
                                 ? `¡Felicidades! Tu ejecución tuvo una similitud del <b>${similitudFinal.toFixed(1)}%</b> con el gesto de referencia. <span style="color:green;">✅ APROBADO</span>`
                                 : `Tu ejecución tuvo una similitud del <b>${similarityPercentage.toFixed(1)}%</b> con el gesto de referencia. <span style="color:red;">❌ NO APROBADO</span> (Se requiere 80% o más)`;
@@ -846,22 +863,30 @@ document.addEventListener('DOMContentLoaded', () => {
                         showFeedback(`✓ Mantén la pose (${Math.ceil(remainingTime/1000)}s)`, true);
                     } else {
                         showFeedback("✓ ¡Correcto!", true);
-                        goToNextExercise();
+
+                        const precisionFinal = Math.min(100, currentSimilarity);  
+
+                        fetch('/repaso/guardar_precision/', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRFToken': getCookie('csrftoken')
+                                            },
+                                            body: JSON.stringify({
+                                                precision: precisionFinal,
+                                                palabra_id: CURRENT_WORD_ID  
+                                            })
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            console.log("Precisión guardada:", data);
+                                            goToNextExercise();
+                                        })
+                                        .catch(error => {
+                                            console.error("Error al guardar precisión:", error);
+                                            goToNextExercise();  // continuar aunque falle
+                                        });
                         
-                        // Usar CURRENT_WORD_ID en lugar de currentWordId
-                        // fetch('/repaso/siguiente/', {
-                        //     method: 'POST',
-                        //     headers: {
-                        //         'Content-Type': 'application/x-www-form-urlencoded',
-                        //         'X-CSRFToken': getCookie('csrftoken')
-                        //     },
-                        //     body: `palabra_id=${CURRENT_WORD_ID}`
-                        // }).then(() => {
-                        //     window.location.href = "/repaso/";
-                        // }).catch(error => {
-                        //     console.error('Error:', error);
-                        //     window.location.href = "/repaso/";
-                        // });
                     }
                 }
             } else {
@@ -869,10 +894,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showFeedback(`✗ Ajusta tu gesto (${currentSimilarity.toFixed(0)}%)`, false);
             }
         }
-        // Función auxiliar para obtener cookies
 
-
-        // Modificar la función calculateSimilarity para usar landmarks normalizados
         function calculateSimilarity(landmarks1, landmarks2) {
             if (!landmarks1 || !landmarks2 || landmarks1.length !== landmarks2.length) return 0;
             

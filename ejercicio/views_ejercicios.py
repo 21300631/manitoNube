@@ -252,7 +252,7 @@ def ejercicio_gesto(request):
         return redirect('mostrar_ejercicio')
 
     ejercicio_actual = ejercicios[index]
-    palabra_id = ejercicio_actual.get('palabra')  # más seguro con .get()
+    palabra_id = ejercicio_actual.get('palabra')  
 
     try:
         palabra = Palabra.objects.get(id=palabra_id)
@@ -276,6 +276,7 @@ def ejercicio_gesto(request):
         'theme': request.session.get('theme', 'light'),
         'palabra_correcta': palabra.palabra,
         'json_url': json_url,
+        'palabra_id': palabra_id,  # Pasar el ID de la palabra al template
     }
 
     try:
