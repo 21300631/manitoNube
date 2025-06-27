@@ -79,9 +79,15 @@ def etapa2(request):
     # Forzar primera lección si todas están bloqueadas
     if all(status == 'bloqueada' for status in lecciones_estado.values()):
         lecciones_estado[34] = 'en-progreso'
+
+    palabras_por_leccion = {}
+    for leccion_id in lecciones_etapa2:
+        palabras = Palabra.objects.filter(leccion_id=leccion_id).values_list('palabra', flat=True)
+        palabras_por_leccion[leccion_id] = list(palabras)
     
     return render(request, 'etapa2.html', {
         'lecciones_estado': lecciones_estado,
+        'palabras_por_leccion': palabras_por_leccion,
         'theme': profile.theme if hasattr(profile, 'theme') else 'light'
     })
 
@@ -118,9 +124,15 @@ def etapa3(request):
     # Forzar primera lección si todas están bloqueadas
     if all(status == 'bloqueada' for status in lecciones_estado.values()):
         lecciones_estado[54] = 'en-progreso'
+
+    palabras_por_leccion = {}
+    for leccion_id in lecciones_etapa3:
+        palabras = Palabra.objects.filter(leccion_id=leccion_id).values_list('palabra', flat=True)
+        palabras_por_leccion[leccion_id] = list(palabras)
     
     return render(request, 'etapa3.html', {
         'lecciones_estado': lecciones_estado,
+        'palabras_por_leccion': palabras_por_leccion,
         'theme': profile.theme if hasattr(profile, 'theme') else 'light'
     })
 
@@ -131,14 +143,11 @@ def etapa4(request):
     profile = Profile.objects.get(user=usuario)
     leccion_actual = profile.leccion
     
-    # Rango de lecciones (116-164) y repasos (401-405)
-    rango_lecciones = list(range(116, 165))
+    rango_lecciones = list(range(116, 171))
     repasos = [401, 402, 403, 404, 405]
     
-    # Inicializar todas como bloqueadas
     lecciones_estado = {leccion: 'bloqueada' for leccion in rango_lecciones + repasos}
-    
-    # Si viene de etapa anterior, comenzar en 110
+
     if leccion_actual < 110:
         leccion_actual = 110
         profile.leccion = 110
@@ -166,7 +175,14 @@ def etapa4(request):
     if leccion_actual in lecciones_estado:
         lecciones_estado[leccion_actual] = 'en-progreso'
     
+    palabras_por_leccion = {}
+    for leccion_id in rango_lecciones:
+        palabras = Palabra.objects.filter(leccion_id=leccion_id).values_list('palabra', flat=True)
+        palabras_por_leccion[leccion_id] = list(palabras)
+
+    
     return render(request, 'etapa4.html', {
         'lecciones_estado': lecciones_estado,
+        'palabras_por_leccion': palabras_por_leccion,
         'theme': profile.theme if hasattr(profile, 'theme') else 'light'
     })
