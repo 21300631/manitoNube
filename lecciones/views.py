@@ -22,13 +22,13 @@ def etapa1(request):
         lecciones_estado[i] = 'completada'
 
     # Para las loterias de repaso
-    if leccion_actual == 9:
+    if leccion_actual == 10:
         lecciones_estado[501] = 'completada'
-    elif leccion_actual == 21:
+    elif leccion_actual == 22:
         lecciones_estado[502] = 'completada'
-    elif leccion_actual == 28:
+    elif leccion_actual == 29:
         lecciones_estado[503] = 'completada'
-    elif leccion_actual == 38:
+    elif leccion_actual == 39:
         lecciones_estado[504] = 'completada'
     
     # Marcar lección actual
@@ -159,15 +159,15 @@ def etapa4(request):
             lecciones_estado[leccion] = 'completada'
 
     # Marcar repasos completados
-    if leccion_actual == 129:
+    if leccion_actual == 130:
         lecciones_estado[401] = 'completada'
-    elif leccion_actual == 143:
+    elif leccion_actual == 144:
         lecciones_estado[402] = 'completada'
-    elif leccion_actual == 152:
+    elif leccion_actual == 153:
         lecciones_estado[403] = 'completada'
-    elif leccion_actual == 161:
+    elif leccion_actual == 162:
         lecciones_estado[404] = 'completada'
-    elif leccion_actual == 170:
+    elif leccion_actual == 171:
         lecciones_estado[405] = 'completada'
 
     

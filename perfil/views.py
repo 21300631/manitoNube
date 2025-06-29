@@ -12,19 +12,21 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from login.views import login_usuario
 from inicio.models import Notificacion
-# Create your views here.
+
+
+
 @login_required
 def perfil(request):
     usuario = request.user
-    perfil = Profile.objects.get(user=usuario)  # Obtiene el perfil del usuario
+    perfil = Profile.objects.get(user=usuario)  
     logros = Logro.objects.filter(usuario=perfil)
-    insignias = [logro.insignia for logro in logros]  # Extrae las insignias
+    insignias = [logro.insignia for logro in logros] 
     notificaciones = Notificacion.objects.filter(receptor=request.user).order_by('-fecha')[:10]
 
     try:
-        medalla = perfil.medalla  # Obtiene la medalla del usuario
+        medalla = perfil.medalla  
     except Profile.DoesNotExist:
-        medalla = None  # Si el usuario no tiene perfil, medalla será None
+        medalla = None  
     contexto = {
             'usuario': usuario,
             'imagen': perfil.imagen,
@@ -45,7 +47,7 @@ def cambiar_foto_perfil(request):
         nueva_imagen = request.FILES.get('nueva_imagen')
         if nueva_imagen:
             perfil = Profile.objects.get(user=request.user)
-            primer_cambio = perfil.imagen.name.endswith('default.jpg') # Ajusta si tienes imagen por defecto
+            primer_cambio = perfil.imagen.name.endswith('default.jpg')
             perfil.imagen = nueva_imagen
             perfil.save()
             messages.success(request, 'Foto de perfil actualizada correctamente')

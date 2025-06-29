@@ -19,12 +19,13 @@ class Notificacion(models.Model):
         ('like', 'Like'),
         ('comentario', 'Comentario'),
         ('reporte', 'Reporte'),
+        ('eliminado', 'Eliminado'),
     ]
 
     emisor = models.ForeignKey(User, related_name='emisor', on_delete=models.CASCADE)
     receptor = models.ForeignKey(User, related_name='receptor', on_delete=models.CASCADE)
     tipo = models.CharField(max_length=20, choices=TIPOS)
-    publicacion = models.ForeignKey(Publicacion, on_delete=models.CASCADE)
+    publicacion = models.ForeignKey(Publicacion, on_delete=models.CASCADE, null=True, blank=True)
     fecha = models.DateTimeField(auto_now_add=True)
     leida = models.BooleanField(default=False)
 

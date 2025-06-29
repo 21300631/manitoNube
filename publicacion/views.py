@@ -6,11 +6,11 @@ from django.http import HttpResponse
 from django.contrib import messages
 MAX_IMAGE_SIZE = 500 * 1024  # 500 KB
 MAX_VIDEO_SIZE = 10 * 1024 * 1024  # 10 MB
+from perfil.models import Insignia, Logro
 
 def pagina(request):
     edad = request.user.profile.edad
     return render(request, 'publicacionNueva.html', {'edad':edad})
-
 @csrf_exempt  
 def nueva_publicacion(request):
     if request.method == "POST":
@@ -54,11 +54,27 @@ def nueva_publicacion(request):
             nueva_publicacion = Publicacion.objects.create(
                 titulo=titulo,
                 contenido=contenido,
-                archivo_media=media,  # Cambiado a archivo_media
+                archivo_media=media,
                 hashtags=hashtags,
                 usuario=profile
             )
             messages.success(request, '¡Publicación creada exitosamente!')
+
+            # Asignar insignia "estudioso" si es la primera publicación
+            publicaciones_count = Publicacion.objects.filter(usuario=profile).count()
+            
+            if publicaciones_count == 1:  # Si es la primera publicación
+                try:
+                    insignia_estudioso = Insignia.objects.get(imagen="insignias/estudioso.png")
+                    # Verificar si el usuario no tiene ya esta insignia
+                    if not Logro.objects.filter(usuario=profile, insignia=insignia_estudioso).exists():
+                        Logro.objects.create(
+                            usuario=profile,
+                            insignia=insignia_estudioso
+                        )
+                        messages.success(request, '¡Felicidades! Has ganado la insignia Estudioso por crear tu primera publicación.')
+                except Insignia.DoesNotExist:
+                    print("Insignia estudioso.png no encontrada en la base de datos")
 
             return redirect('/publicacion/')
         
@@ -67,7 +83,6 @@ def nueva_publicacion(request):
             return render(request, 'publicacionNueva.html', context)
     
     return HttpResponse("Método no permitido", status=405)
-
 
 
 def vista_alguna(request):

@@ -434,9 +434,26 @@ input:checked + .slider:before {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;
 }
+.panelDerecho {
+    width: 60%;
+    height: 100vh;
+    position: fixed;
+    right: 0;
+    top: 0;
+    display: flex; /* Añade esto */
+    flex-direction: column; /* Añade esto */
+    overflow: hidden; /* Añade esto */
+}
 
-@media (max-width: 480px) {
-    
+.panelInsignias {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-height: calc(100vh - 40vh); /* Ajusta según la altura de tus otros elementos */
+    overflow-y: auto; /* Esto habilita el scroll vertical */
+    padding: 10px 0;
+    margin-top: 20px;
 }
 
 .insignias {
@@ -446,6 +463,27 @@ input:checked + .slider:before {
     padding: 20px;
     background-color: #e86468;
     border-radius: 20px;
+    width: 90%;
+    min-height: min-content; /* Asegura que el contenedor se expanda con el contenido */
+}
+
+/* Estilos para la barra de scroll */
+.panelInsignias::-webkit-scrollbar {
+    width: 8px;
+}
+
+.panelInsignias::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.panelInsignias::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.panelInsignias::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .insignia-item {

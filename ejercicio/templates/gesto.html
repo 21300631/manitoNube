@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gesto</title>
     <link rel="stylesheet" href="{% static 'e06.css'%}">
-    <link rel="icon" href="{% static 'images/favicon.ico' %}">
 
 </head>
 <body class="{{ theme }}" data-theme="{{ theme }}">
@@ -28,7 +27,7 @@
                 <div class="ejercicio">
                     <div class="gesto">
                         {% if is_video %}
-                            <video id="gestoVideo" src="{{ archivo }}" autoplay loop muted width="80%" data-palabra="{{ palabra_correcta }}" data-palabra-json="{% static '' %}{{ json_url }}"></video>
+                            <video id="gestoVideo" src="{{ archivo }}" autoplay loop muted width="80%" data-palabra="{{ palabra_correcta }}" data-palabra-json="{{ json_url }}"></video>
                         {% else %}
                             <img src="{{ archivo }}" alt="Gesto {{ palabra_correcta }}" width="80%" style="padding: 10%; margin: 0;">
                         {% endif %}
@@ -78,9 +77,7 @@
         const PALABRA_ACTUAL = "{{ palabra_correcta }}";
         const palabraId = "{{ palabra_id }}";
         
-        // Solo cargamos landmarks si NO es un video
         if (!IS_VIDEO_EXERCISE) {
-            // const LANDMARKS_JSON_URL = "{% static '' %}" + "landmarks/{{ palabra_correcta }}.json";
             let referenceLandmarks = null;
             
             fetch(LANDMARKS_JSON_URL)

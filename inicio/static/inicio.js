@@ -1,4 +1,3 @@
-// Primero define la gráfica sin datos
 let myDoughnutChart;
 
    const APP_URLS = {
@@ -8,10 +7,8 @@ let myDoughnutChart;
 function inicializarGrafica(puntosActuales, puntosFaltantes) {
     const ctx = document.getElementById('dona-grafica').getContext('2d');
     
-    // Actualiza el texto con los puntos
     document.getElementById('puntos-usuario').textContent = puntosActuales;
     
-    // Si el usuario tiene todas las etapas completadas
     if (puntosFaltantes === 0) {
         const data = {
             labels: ['¡Todas las etapas completadas!'],
@@ -46,7 +43,6 @@ function inicializarGrafica(puntosActuales, puntosFaltantes) {
         return;
     }
     
-    // Configuración normal cuando faltan puntos
     const data = {
         labels: [
             `Puntos obtenidos: ${puntosActuales}`,
@@ -97,30 +93,27 @@ function inicializarGrafica(puntosActuales, puntosFaltantes) {
     myDoughnutChart = new Chart(ctx, config);
 }
 
-// Función para calcular los puntos faltantes para la próxima etapa
 function calcularPuntosFaltantes(puntosActuales) {
     if (puntosActuales < 6800) return 6800 - puntosActuales;
     if (puntosActuales < 10200) return 10200 - puntosActuales;
     if (puntosActuales < 16200) return 16200 - puntosActuales;
-    return 0; // Si tiene todos los puntos
+    return 0; 
 }
 
 
 function bringToFront(element) {
-    let cards = Array.from(document.querySelectorAll('.card')); // Convertimos NodeList en Array
-    let selectedIndex = cards.indexOf(element); // Encontramos el índice de la tarjeta seleccionada
+    let cards = Array.from(document.querySelectorAll('.card')); 
+    let selectedIndex = cards.indexOf(element); 
 
-    // Reorganizar las tarjetas en el nuevo orden
     let newOrder = [
-        ...cards.slice(selectedIndex + 1), // Tarjetas después de la seleccionada
-        ...cards.slice(0, selectedIndex),  // Tarjetas antes de la seleccionada
-        element // La tarjeta seleccionada va al final (al frente)
+        ...cards.slice(selectedIndex + 1), 
+        ...cards.slice(0, selectedIndex),  
+        element 
     ];
 
-    // Aplicar nuevos valores de posición y z-index
     newOrder.forEach((card, index) => {
-        card.style.left = `${index * 80}px`; // Reposiciona cada tarjeta
-        card.style.zIndex = index + 1; // Asigna un nuevo z-index en orden
+        card.style.left = `${index * 80}px`; 
+        card.style.zIndex = index + 1;
     });
 }
 
@@ -139,16 +132,13 @@ function accesoEtapa(etapa, elemento) {
             const puntosUsuario = data.puntos;
             const leccionUsuario = data.leccion_actual;
             
-            // Verificar si la etapa está desbloqueada según el backend
             if(data.unlocked_stages[`etapa${etapa}`]) {
                 window.location.href = `/lecciones/etapa${etapa}/`;
             } else {
-                // Determinar qué requisito falta
                 let mensaje = '';
                 if(puntosUsuario < puntosNecesarios) {
                     mensaje = `Necesitas ${puntosNecesarios} puntos para desbloquear esta etapa.`;
                 } else {
-                    // Calcular lecciones faltantes
                     const etapas = data.etapas_lecciones;
                     let leccionesRequeridas = 0;
                     
@@ -192,7 +182,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-// Actualiza el coso ese DOM para incluir la gráfica
 document.addEventListener('DOMContentLoaded', function() {
     fetch(APP_URLS.puntosUsuario)
         .then(response => {
@@ -202,16 +191,13 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.error) throw new Error(data.error);
             
-            // Bloquear etapas según el backend
             for (let i = 2; i <= 4; i++) {
                 const card = document.getElementById(`etapa${i}-card`).closest('.card');
             }
             
-            // Resto del código para la gráfica
             const puntosFaltantes = calcularPuntosFaltantes(data.puntos);
             inicializarGrafica(data.puntos, puntosFaltantes);
             
-            // Actualizar texto de siguiente etapa
             const nextStageText = document.querySelector('.texto-puntos span');
             if (!data.unlocked_stages.etapa2) {
                 nextStageText.textContent = '2 (6800 pts y completar etapa 1)';
@@ -234,8 +220,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-
-// Para los desafios
 
 document.addEventListener('DOMContentLoaded', function() {
     const nombreDesafio = document.getElementById('nombre-desafio');
@@ -266,7 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
             break;
     }
 
-    // actualizar la pagina
     nombreDesafio.textContent = desafio;
     descripcionDesafio.textContent = descripcion;
 

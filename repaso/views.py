@@ -199,25 +199,3 @@ def finalizar_repaso(request):
 @login_required
 def no_hay_palabras(request):
     return render(request, 'noPalabras.html')
-
-
-@login_required
-@csrf_exempt
-def guardar_precision(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        precision = data.get('precision')
-        palabra_id = data.get('palabra_id')
-
-        perfil = request.user.profile
-
-        try:
-            palabra = Palabra.objects.get(id=palabra_id)
-            palabra_usuario, created = PalabraUsuario.objects.get_or_create(usuario=perfil, palabra=palabra)
-            palabra_usuario.precision = precision
-            palabra_usuario.save()
-            return JsonResponse({'status': 'ok'})
-        except Palabra.DoesNotExist:
-            return JsonResponse({'error': 'Palabra no encontrada'}, status=404)
-
-    return JsonResponse({'error': 'Método no permitido'}, status=405)

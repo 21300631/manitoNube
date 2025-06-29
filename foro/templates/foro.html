@@ -127,6 +127,27 @@
             confirmButtonText: 'OK'
         });
     </script>
+    {% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+                {% if 'swal' in message.tags %}
+                    Swal.fire({
+                        title: '{{ message }}',
+                        {% if 'swal_subtitle' in message.tags %}
+                        html: '{{ message }}',
+                        {% endif %}
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                {% else %}
+                    // Mensajes normales de Django
+                    alert('{{ message }}');
+                {% endif %}
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
 
     <script>
         function getCookie(name) {

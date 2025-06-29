@@ -28,7 +28,7 @@ def loteria(request):
     
     # Obtener la categoría actual
     categoria_actual = Palabra.objects.filter(
-        leccion_id=perfil.leccion
+        leccion_id=perfil.leccion-1
     ).first().categoria
     
     # Obtener 12 palabras aleatorias practicadas

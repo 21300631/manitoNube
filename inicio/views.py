@@ -126,7 +126,7 @@ def inicioSesion(request):
 
     if cantidadPalabras >= 2:    #50
         try:
-            insignia_50P= Insignia.objects.get(imagen="insignias/calmado50.png")
+            insignia_50P= Insignia.objects.get(imagen="insignias/algre50.png")
             logro_existente = Logro.objects.filter(usuario=perfil, insignia=insignia_50P).exists()
 
             if not logro_existente:
@@ -144,7 +144,7 @@ def inicioSesion(request):
             if not logro_existente:
                 Logro.objects.create(usuario=perfil, insignia=insignia_100P)
                 print("Insignia 100")
-                messages.success(request, '¡Has ganado la insignia 50 palabras por completar 50 palabras! Sigue así 🏅')
+                messages.success(request, '¡Has ganado la insignia 100 palabras por completar 50 palabras! Sigue así 🏅')
         except Insignia.DoesNotExist:
             messages.success(request, 'No hay insignias nuevas')
 
@@ -190,13 +190,11 @@ def inicioSesion(request):
         traceback.print_exc()
         return render(request, 'error_generico.html', {'mensaje': str(e)})
     
-
 @login_required
 def puntosUsuario(request):
     user = request.user
     usuario = get_object_or_404(Profile, user=user)
     
-    # Definir el número máximo de lecciones por etapa
     etapas_lecciones = {
         'etapa1': 38,
         'etapa2': 22,
@@ -204,20 +202,35 @@ def puntosUsuario(request):
         'etapa4': 55
     }
     
-    # Verificar si ha completado las lecciones de la etapa anterior
     etapa2_completa = usuario.puntos >= 6800 and usuario.leccion >= etapas_lecciones['etapa1']
     etapa3_completa = usuario.puntos >= 10200 and usuario.leccion >= sum(etapas_lecciones[e] for e in ['etapa1', 'etapa2'])
     etapa4_completa = usuario.puntos >= 16200 and usuario.leccion >= sum(etapas_lecciones[e] for e in ['etapa1', 'etapa2', 'etapa3'])
+    
+    maestro_asignado = False
+    if usuario.puntos >= 34400:
+        try:
+            insignia_maestro = Insignia.objects.get(imagen="insignias/maestro.png")
+            if not Logro.objects.filter(usuario=usuario, insignia=insignia_maestro).exists():
+                Logro.objects.create(
+                    usuario=usuario,
+                    insignia=insignia_maestro
+                )
+                maestro_asignado = True
+                messages.success(request, 'Has alcanzado el rango de Maestro', extra_tags='swal_subtitle')
+        except Insignia.DoesNotExist:
+            print("Insignia maestro.png no encontrada en la base de datos")
+            messages.error(request, 'Error: Insignia de maestro no configurada', extra_tags='swal')
     
     return JsonResponse({
         'puntos': usuario.puntos,
         'leccion_actual': usuario.leccion,
         'unlocked_stages': {
-            'etapa1': True,  # Siempre disponible
+            'etapa1': True, 
             'etapa2': etapa2_completa,
             'etapa3': etapa3_completa,
             'etapa4': etapa4_completa,
         },
-        'etapas_lecciones': etapas_lecciones
+        'etapas_lecciones': etapas_lecciones,
+        'es_maestro': usuario.puntos >= 34400,
+        'maestro_asignado': maestro_asignado  # Nuevo campo para feedback
     })
-

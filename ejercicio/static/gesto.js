@@ -98,10 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
             function normalizeLandmarks(landmarks) {
                 if (!landmarks || landmarks.length === 0) return null;
                 
-                // 1. Convertir a array de puntos {x, y, z}
+                // Convertir a array de puntos {x, y, z}
                 const points = landmarks.map(p => ({x: p.x, y: p.y, z: p.z}));
                 
-                // 2. Calcular centroide
+                //  Calcular centroide
                 const centroid = points.reduce((acc, p) => {
                     acc.x += p.x;
                     acc.y += p.y;
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     z: p.z - centroid.z
                 }));
                 
-                // 4. Calcular escala basada en la distancia muñeca (punto 0) a dedo medio (punto 12)
+                //  Calcular escala basada en la distancia muñeca (punto 0) a dedo medio (punto 12)
                 const wrist = centered[0];
                 const middleFinger = centered[12];
                 const scale = Math.sqrt(
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (scale === 0) return null;
                 
-                // 5. Normalizar y aplicar pesos a puntos clave
+                //  Normalizar y aplicar pesos a puntos clave
                 return centered.map((p, i) => ({
                     id: i,
                     x: p.x / scale,
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
             function calculateSimilarity(userLandmarks, referenceLandmarks) {
                 if (!userLandmarks || !referenceLandmarks) return 0;
                 
-                // 1. Normalizar ambos conjuntos
+                // Normalizar ambos conjuntos o sea ps centrarlos
                 const normalizedUser = normalizeLandmarks(userLandmarks);
                 const normalizedRef = normalizeLandmarks(referenceLandmarks);
 
@@ -200,12 +200,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (!normalizedUser || !normalizedRef) return 0;
                 
-                // 2. Alinear usando Procrustes (opcional, puede ser costoso computacionalmente)
+                // Alinear usando Procrustes es decir que unimos las manitas
                 const alignedUser = procrustesAlignment(normalizedUser, normalizedRef);
                 
-                // 3. Pesos para diferentes partes de la mano
+                //  Que tan importante es cada parte de la mano
                 const weights = {
-                    palm: [0, 1, 5, 9, 13, 17], // Puntos de la palma
+                    palm: [0, 1, 5, 9, 13, 17], // P untos de la palma
                     thumb: [1, 2, 3, 4],         // Pulgar
                     index: [5, 6, 7, 8],         // Índice
                     middle: [9, 10, 11, 12],    // Medio
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let totalError = 0;
                 let totalWeight = 0;
                 
-                // 4. Comparar punto por punto con pesos diferentes
+                //  Comparar punto por punto con pesos diferentes
                 for (let i = 0; i < alignedUser.length; i++) {
                     const userPoint = alignedUser[i];
                     const refPoint = normalizedRef[i];
@@ -241,8 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const avgError = totalError / totalWeight;
                 
-                // 5. Convertir error a similitud (0-1)
-                // Ajustar estos parámetros según tus necesidades
                 const similarity = Math.exp(-2.5 * avgError);
                 
                 return Math.max(0, Math.min(1, similarity));
@@ -254,10 +252,10 @@ document.addEventListener('DOMContentLoaded', () => {
             function processAllFrames(userFrames, referenceFrames) {
                 if (!userFrames || userFrames.length === 0 || !referenceFrames || referenceFrames.length === 0) return 0;
                 
-                // 1. Muestrear frames para igualar longitud
+                // Muestrear frames para igualar longitud
                 const sampledUserFrames = sampleFrames(userFrames, referenceFrames.length);
                 
-                // 2. Encontrar el mejor desplazamiento temporal (DTW básico)
+                // Encontrar el mejor desplazamiento temporal (DTW básico)
                 let bestSimilarity = 0;
                 const maxOffset = Math.min(3, referenceFrames.length); // Pequeño margen para sincronización
                 
@@ -294,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 
-                return bestSimilarity * 100; // Convertir a porcentaje
+                return bestSimilarity * 100; 
             }
 
             function sampleFrames(frames, targetCount) {
@@ -355,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                     
-                    // Solo incluir frames con movimiento significativo
+                    // Solo incluye los frames con movimiento que si importa
                     if (maxMovement > movementThreshold) {
                         filteredFrames.push(currentFrame);
                     }
@@ -366,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }           
 
 
-            // Modificar la función stopRecording para mostrar los resultados
+            // Fuincion para manejar y mostrar los reslutados
             function stopRecording() {
                 if (!isRecording) return;
                 
@@ -398,8 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const isApproved = similitudFinal >= 80;
 
                             if (similitudFinal >= 100)
-                                similitudFinal = 100; // Limitar al 100% máximo
-
+                                similitudFinal = 100; 
                             try {
                                 fetch("/ejercicio/guardar_precision/", {
                                     method: "POST",
@@ -419,9 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             const resultMessage = isApproved 
                                 ? `¡Felicidades! Tu ejecución tuvo una similitud del <b>${similitudFinal.toFixed(1)}%</b> con el gesto de referencia. <span style="color:green;">✅ APROBADO</span>`
-                                : `Tu ejecución tuvo una similitud del <b>${similarityPercentage.toFixed(1)}%</b> con el gesto de referencia. <span style="color:red;">❌ NO APROBADO</span> (Se requiere 80% o más)`;
+                                : `Tu ejecución tuvo una similitud del <b>${similitudFinal.toFixed(1)}%</b> con el gesto de referencia. <span style="color:red;">❌ NO APROBADO</span> (Se requiere 80% o más)`;
                             
-                            // Mostrar resultados al usuario con SweetAlert2
                             Swal.fire({
                                 title: isApproved ? '¡Aprobado!' : 'Intenta de nuevo',
                                 html: resultMessage,
@@ -432,18 +428,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                     title: isApproved ? 'approved-title' : 'not-approved-title'
                                 }
                             }).then((result) => {
-                                // Esta función se ejecuta cuando el usuario hace clic en "Entendido"
                                 if (isApproved) {
-                                    // Redirigir al siguiente ejercicio solo si fue aprobado
                                      actualizarBarraProgreso(10);
-                                    // Redirigir al siguiente ejercicio solo si fue aprobado
                                     setTimeout(() => {
                                         window.location.href = "/ejercicio/siguiente/";
                                     }, 500);
                                 }
                             });
 
-                            // También puedes mostrar resultados más detallados en la consola
                             console.log(`Similitud promedio: ${similarityPercentage.toFixed(1)}% - ${isApproved ? 'APROBADO' : 'NO APROBADO'}`);
                         } else {
                             Swal.fire({
@@ -493,7 +485,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     allHandLandmarks.push(frameHandLandmarks);
                     
-                    // Opcional: mostrar en consola (puede ser mucho output)
                     console.log(`Landmarks de manos frame ${allHandLandmarks.length}:`, frameHandLandmarks);
                 }
             }
@@ -634,15 +625,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     else {
         console.log("Ejercicio de imagen detectado");
-        // [Aquí va todo tu código para el manejo de imágenes con landmarks]
-        // Asegúrate de que este bloque esté completo y bien cerrado
 
-        // Verifica que la URL esté definida
         if (!LANDMARKS_JSON_URL) {
             console.error("URL de landmarks no definida");
             return;
         }
-        // [Mantén aquí tu código original para imágenes]
 
         // Elementos del DOM
         const videoElement = document.createElement('video');
@@ -671,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let correctPoseStartTime = null;
         const REQUIRED_CORRECT_TIME = 1000;
         let calibrationValues = {
-            openHandThreshold: 0.4, // Ajustar según pruebas
+            openHandThreshold: 0.4, 
             similarityThreshold: 80
         };
 
@@ -695,7 +682,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 showFeedback("Error cargando gesto de referencia", false);
             });
 
-        // Configuración de elementos de video
         videoElement.autoplay = true;
         videoElement.style.transform = "scaleX(-1)";
         canvasElement.style.width = '100%';
@@ -703,7 +689,6 @@ document.addEventListener('DOMContentLoaded', () => {
         canvasElement.style.transform = "scaleX(-1)";
         canvasElement.style.borderRadius = '10px';
 
-        // Añadir elementos al DOM
         const userGestoDiv = document.querySelector('.gesto.g-usuario');
         userGestoDiv.appendChild(videoElement);
         userGestoDiv.appendChild(canvasElement);
@@ -716,7 +701,6 @@ document.addEventListener('DOMContentLoaded', () => {
             feedbackElement.style.color = isCorrect ? '#00FF00' : '#FF0000';
             feedbackElement.style.backgroundColor = isCorrect ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)';
             
-            // Efecto de parpadeo para feedback positivo
             if (isCorrect) {
                 feedbackElement.style.animation = 'blink 1s 2';
             } else {
@@ -724,7 +708,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Función mejorada para calcular similitud
+        // Funcion que calcula la similitud 
         function calculateSimilarity(landmarks1, landmarks2) {
             if (!landmarks1 || !landmarks2 || landmarks1.length !== landmarks2.length) return 0;
             
@@ -786,7 +770,7 @@ document.addEventListener('DOMContentLoaded', () => {
             locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
         });
 
-        // Configuración más tolerante para detección
+        // Configuración para detección
         hands.setOptions({
             maxNumHands: 2,
             modelComplexity: 1,
@@ -806,10 +790,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Agrega esto en la parte donde configuras los elementos (al principio del código)
-        const Swal = window.Swal; // Asegúrate de tener SweetAlert cargado
+        const Swal = window.Swal; 
 
-        // Modifica la parte del onResults de MediaPipe Hands para mostrar la alerta cuando sea necesario
         hands.onResults(results => {
             canvasElement.width = videoElement.videoWidth;
             canvasElement.height = videoElement.videoHeight;
@@ -854,7 +836,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             const elapsedTime = Date.now() - correctPoseStartTime;
                             const remainingTime = REQUIRED_CORRECT_TIME - elapsedTime;
                             
-                            // Actualizar feedback con cuenta regresiva
                             if (remainingTime > 0) {
                                 showFeedback(`✓ Mantén la pose (${Math.ceil(remainingTime/1000)}s)`, true);
                             } else {
@@ -876,7 +857,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 })
                                 .then(data => {
                                     console.log("Precisión guardada:", data);
-                                    // Actualizar barra de progreso y redirigir
                                     actualizarBarraProgreso(10);
                                     setTimeout(() => {
                                         safeRedirect();
@@ -884,7 +864,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 })
                                 .catch(error => {
                                     console.error("Error al guardar precisión:", error);
-                                    // Aún así redirigir (opcional)
                                     actualizarBarraProgreso(10);
                                     setTimeout(() => {
                                         safeRedirect();
@@ -990,7 +969,6 @@ document.addEventListener('DOMContentLoaded', () => {
             [0, 5], [0, 9], [0, 13], [0, 17]       // Conexiones adicionales
         ];
 
-        // Animación CSS para feedback
         const style = document.createElement('style');
         style.textContent = `
             @keyframes blink {
@@ -1009,54 +987,29 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        // Obtener progreso actual de forma más robusta
         let progresoActual;
         
-        // Primero intenta obtenerlo del atributo data-progreso
         if (progressBar.dataset.progreso) {
             progresoActual = parseInt(progressBar.dataset.progreso);
         } 
-        // Luego del estilo
         else if (progressBar.style.height) {
             progresoActual = parseInt(progressBar.style.height);
         }
-        // Finalmente del atributo inicial o 0
         else {
             progresoActual = parseInt(progressBar.dataset.progresoInicial) || 0;
         }
         
-        // Asegurarse que no sea NaN
         if (isNaN(progresoActual)) {
             progresoActual = 0;
         }
         
-        // Calcular nuevo progreso (sin exceder 100)
         const nuevoProgreso = Math.min(progresoActual + porcentaje, 100);
         
-        // Actualizar visualmente y en el dataset
         progressBar.style.height = nuevoProgreso + "%";
         progressBar.dataset.progreso = nuevoProgreso;
         
         console.log(`Progreso actualizado de ${progresoActual}% a ${nuevoProgreso}%`);
         
-        // Guardar en el servidor
-        // try {
-        //     const response = await fetch('/actualizar_progreso/', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'X-CSRFToken': getCookie('csrftoken')
-        //         },
-        //         body: JSON.stringify({ progreso: nuevoProgreso })
-        //     });
-            
-        //     if (!response.ok) throw new Error('Error al guardar progreso');
-            
-        //     return nuevoProgreso;
-        // } catch (error) {
-        //     console.error("Error al guardar progreso:", error);
-        //     return nuevoProgreso;
-        // }
     }
 
     // Función auxiliar para obtener cookies

@@ -117,6 +117,8 @@
                                         respondió a tu publicación.
                                     {% elif noti.tipo == 'reporte' %}
                                         reportó tu publicación.
+                                    {% elif noti.tipo == 'eliminado' %}
+                                        tu publicación ha sido eliminada por múltiples reportes.
                                     {% endif %}
                                 </p>
                             </li>
@@ -139,6 +141,8 @@
         </div>
 
     </div>
+
+
     {% if messages %}
     <script>
         {% for message in messages %}
@@ -150,10 +154,15 @@
                     confirmButtonText: 'Entendido',
                     customClass: {
                         title: 'custom-title-class',
-                    }
+                    },
+                    allowOutsideClick: false,  // Evita cerrar haciendo clic fuera
+                    allowEscapeKey: false,    // Evita cerrar con ESC
+                    allowEnterKey: false      // Evita cerrar con Enter
                 }).then((result) => {
-                    // Redirige independientemente de cómo se cierre el alert
-                    window.location.href = "/repaso/";
+                    // Solo redirige si hace clic en "Entendido"
+                    if (result.isConfirmed) {
+                        window.location.href = "/repaso/";
+                    }
                 });
             {% else %}
                 Swal.fire({
@@ -166,6 +175,18 @@
                 });
             {% endif %}
         {% endfor %}
+    </script>
+    
+    {% else %}
+    <script>
+        Swal.fire({
+            icon: 'info',
+            title: '¡Bienvenido!',
+            text: '¡Comienza tu aventura de aprendizaje!',
+            customClass: {
+                title: 'custom-title-class',
+            }
+        });
     </script>
     {% endif %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

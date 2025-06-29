@@ -269,7 +269,7 @@ def verificar_emparejar(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
     
-
+from django.utils import timezone
 @csrf_exempt  
 @login_required
 def guardar_precision(request):
@@ -282,10 +282,15 @@ def guardar_precision(request):
 
         try:
             palabra = Palabra.objects.get(id=palabra_id)
-            palabra_usuario, created = PalabraUsuario.objects.get_or_create(usuario=perfil, palabra=palabra)
+            palabra_usuario, created = PalabraUsuario.objects.get_or_create(
+                usuario=perfil, 
+                palabra=palabra,
+                defaults={'fecha_completada': timezone.now()} 
+            )
             palabra_usuario.precision = precision
+            if not created:
+                palabra_usuario.fecha_completada = timezone.now()  
             palabra_usuario.save()
-
             return JsonResponse({
                 'status': 'ok',
                 'precision': precision,
